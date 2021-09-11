@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find udp_com)/launch/udp_com.launch">
+        <arg name="ethernet_interface" value="eno2"/>
+    </include>
+</launch>

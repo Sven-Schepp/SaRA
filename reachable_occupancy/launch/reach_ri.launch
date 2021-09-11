@@ -1,0 +1,12 @@
+<launch>
+  <arg name="frame_stop" default="150"/>
+  <arg name="ro_path" default="$(find reachable_occupancy)"/>
+  <arg name="mvmt_csv" default="$(arg ro_path)/src/tests/simple_skeleton_mvmt.csv"/>
+  <param name="csv_path" type="str" value="$(arg mvmt_csv)"/>
+  <param name="frame_stop" type="int" value="$(arg frame_stop)"/>
+
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg ro_path)/rviz/ro_config_no-angle.rviz" required="true"/>
+  <node pkg="reachable_occupancy" type="reach_ri" name="occupancy_visualizer" required="true" output="screen"/>
+  <node pkg="reachable_occupancy" type="skeleton_publisher.py" name="demo_point_publisher" output="screen"/>
+</launch>
