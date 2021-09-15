@@ -23,7 +23,7 @@ SaRA implements our approach to reachability analysis in form of set based occup
 
 
 ## Features
-Reach-RI provides the following features through **reach_lib**:
+SaRA provides the following features through **reach_lib**:
 - Compatibility with Linux and Windows based systems (makefiles are included and can be customized)
 - Generation of full body articulated occupancies previously defined by [Pereira et al.](https://ieeexplore.ieee.org/abstract/document/8206314?casa_token=3Lltavadmu0AAAAA:ZaQr5_E1PBVsZFOxVj4DbIRHQULRRCIS90PohfxvBvNjYjKSQ2l3PaFtRUkuuZDwKdaF-Zo)
 - Generation of cylindrical reachable sets (occupancies) as defiend by [Liu et al.](https://ieeexplore.ieee.org/abstract/document/8202313?casa_token=rCL9La4MzXYAAAAA:NjQLJit4p1xqzhjcvGqBX1NdzxSWeiqMObqT-NGLqNJKRG-e_kpa7MuQGZHsKl66qJBW-60)
@@ -35,7 +35,7 @@ Reach-RI provides the following features through **reach_lib**:
 - Built on a small codebase of less than 5000 LOC
 
 
-Reach-RI provide the following ROS based functionality through **reachable_occupancy**:
+SaRA provide the following ROS based functionality through **reachable_occupancy**:
 - Visualization of occupancies calculated within reach_lib
 - Volume calculations for all models contained in reach_lib
 - Reception and processing of live motion captured data over UDP and ROS topics
@@ -45,9 +45,9 @@ Reach-RI provide the following ROS based functionality through **reachable_occup
 - Built on fast C++ based nodes
 - Integrable in other ROS projects
 
-## How does Reach-RI work?
-Reach-RI is composed of a C++ based library (reach_lib) and a ROS-package (reachable_occupancy) both of which can be used independently. The former is portable and can be integrated with any project that supports C++ based libraries while the latter contains reach_lib and provides further functionalities based on ROS as stated in section [Features](#features).<br>
-Reach-RI provides two general classes of occupancy models: `Articulated` and `Pedestrian` which we generally refer to as a type of `Obstacle` that robots must circumnavigate. The `Articulated` models describe the human occupancy as a set of the occupancies of body parts or extremities. There exist three versions of `Articulated` models:<br>
+## How does SaRA work?
+SaRA is composed of a C++ based library (reach_lib) and a ROS-package (reachable_occupancy) both of which can be used independently. The former is portable and can be integrated with any project that supports C++ based libraries while the latter contains reach_lib and provides further functionalities based on ROS as stated in section [Features](#features).<br>
+SaRA provides two general classes of occupancy models: `Articulated` and `Pedestrian` which we generally refer to as a type of `Obstacle` that robots must circumnavigate. The `Articulated` models describe the human occupancy as a set of the occupancies of body parts or extremities. There exist three versions of `Articulated` models:<br>
 - `ArticulatedAccel`: A set of `BodyPart` occupancies; Uses live Cartesian **joint positions** and **velocities** with **estimated maximum acceleration** parameters per `BodyPart`
 - `ArticulatedVel`: A set of `BodyPart` occupancies; Uses live Cartesian **joint positions** and **estimated maximum velocity** parameters per `BodyPart`
 - `ArticulatedPos`: A set of `Extremity` occupancies; Uses live Cartesian **joint positions** as well as **estimated length** and **maximum velocity parameters** per `Extremity`
@@ -64,7 +64,7 @@ While `Pedestrian` models produce obstacles with larger volumes, they also requi
 <img src="/images/Cyl.PNG" alt="pedestrian" width="300"/>
 
 ## How to integrate reach_lib?
-Reach-RI is C++ based and thus all individual reach_lib headers can be included in any C++ compatible project within the dedicated include directory. To employ individual components of reach_lib within your project, the respective namespaces must be resolved first. An example would be the creation of an `ArticulatedAccel` instance as such:
+SaRA is C++ based and thus all individual reach_lib headers can be included in any C++ compatible project within the dedicated include directory. To employ individual components of reach_lib within your project, the respective namespaces must be resolved first. An example would be the creation of an `ArticulatedAccel` instance as such:
 ```cpp
 obstacles::articulated::accel::ArticulatedAccel human_a;
 ```
@@ -256,5 +256,5 @@ Your visualization should open an RViz instance and display models based on moti
 Add these commands to tasks.json in [VSCode](https://code.visualstudio.com/) for convenience.
 
 # License
-Reach-RI is licensed under the terms of the GPL Open Source license and is freely available.<br>
+SaRA is licensed under the terms of the GPL Open Source license and is freely available.<br>
 All projects expanding upon or integrating Reach-RI are subject to the terms of the GPL Open Source license.
