@@ -4,7 +4,7 @@
 SaRA implements our approach to reachability analysis in form of set based reachable occupancy(RO). The objective is thereby defined as: providing methods for provably safe human robot interaction that can be easily integrated, improved, and expanded upon. SaRA consist of a library (Reachlib) containing all functionalities required for RO calculation as well as a [ROS](https://www.ros.org/) package (reachable_occupancy) which includes ReachLib and provides RO-volume-calculation and RO-visualization in [RViz](http://wiki.ros.org/rviz).
 <br>A short video explanation and demonstration of occupancies visualized in RViz based on motion capture data can be found [here](https://www.youtube.com/watch?v=QDYq_FQL1Ds).
 
-<img align="center" src="/images/f1.png" alt="drawing" width="350"/><img align="center" src="/images/f1o.png" alt="drawing" width="350"/>
+<img align="center" src="/images/f1.PNG" alt="drawing" width="350"/><img align="center" src="/images/f1o.PNG" alt="drawing" width="350"/>
 
 ## Table of Contents
 
