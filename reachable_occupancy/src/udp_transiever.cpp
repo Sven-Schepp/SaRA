@@ -203,8 +203,8 @@ void UDPTransiever::udp_callback(udp_com::UdpPacket data) {
 void UDPTransiever::robot_callback(udp_com::UdpPacket data) {
   // Reset outdate capsule information
   this->robot_capsules_ = {};
-
-  std::vector<Point> robot_joints = {};
+  std::vector<Point> rob_pos_prev = this->rob_pos_;
+  this->rob_pos_ = {};
 
   for (int i = 0; i < this->joint_num_; i++) {
     Point p1 = Point();
@@ -222,6 +222,10 @@ void UDPTransiever::robot_callback(udp_com::UdpPacket data) {
     p2.z = this->scale_ * (*reinterpret_cast<float*>(&data.data[20 + i * 28]));
 
     double r = this->scale_ * (*reinterpret_cast<float*>(&data.data[24 + i * 28]));
+    rob_pos_.push_back(p1);
+    rob_pos_.push_back(p2);
+
+
 
 
 
@@ -240,11 +244,15 @@ void UDPTransiever::robot_callback(udp_com::UdpPacket data) {
     Capsule c = Capsule(p1, p2, r);
     this->robot_capsules_.push_back(c);
   }
-
-  // Get t_break -> might need to be scaled if it is located at the end
-
-  // std::cout << "Capsule size: " << data.data.size() << "\n";
-  this->t_break_ = (*reinterpret_cast<float*>(&data.data[(this->robot_capsules_.size()) * 28]));
+  this->fs_ = true;
+  for (int i = 0; i < rob_pos_prev.size(); i++) {
+    if (Point::norm(this->rob_pos_[i], rob_pos_prev[i]) > 0.0002) {
+      this->fs_ = false;
+      break;
+    }
+  }
+  // std::cout << "Stop: " << this->full_stop_ << "\n";
+  this->t_brake_ = (*reinterpret_cast<float*>(&data.data[(this->robot_capsules_.size()) * 28]));
 }
 
 bool UDPTransiever::create_socket(ros::NodeHandle nh, std::string srcAddr,

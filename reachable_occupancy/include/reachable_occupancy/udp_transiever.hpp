@@ -111,8 +111,8 @@ class UDPTransiever {
   }
 
   //! \brief Returns the current time until stand-still of the robot
-  inline double get_t_break() {
-    return this->t_break_;
+  inline double get_t_brake() {
+    return this->t_brake_;
   }
 
   //! \brief Returns the number of joints received within a UDP package
@@ -145,13 +145,18 @@ class UDPTransiever {
     return this->robot_capsules_;
   }
 
+  //! \brief Returns the full_stop_ parameter
+  inline bool get_full_stop() {
+    return this->fs_;
+  }
+
   //! \brief The ROS callback that receives the unpacked udp_data
   //! and converts the byte array into joint positions.
   //! \param[in] data The received UDP message converted from UDP packets
   void udp_callback(udp_com::UdpPacket data);
 
   //! \brief The ROS callback that receives unpacked udp_data
-  //! and converts the byte array into robot capsules and t_break.
+  //! and converts the byte array into robot capsules and t_brake.
   //! \param[in] data The received UDP message converted from UDP packets
   void robot_callback(udp_com::UdpPacket data);
 
@@ -164,6 +169,8 @@ class UDPTransiever {
   static bool create_socket(ros::NodeHandle nh, std::string srcAddr = "192.168.13.1",
                    std::string destAddr = "192.168.1.1", uint16_t port = 8080,
                   bool isMulicast = false);
+  
+  
 
  private:
   //! \brief IP-Address of this device on the network used to receive udp packets
@@ -187,8 +194,8 @@ class UDPTransiever {
   //! \brief The time at which the previous udp package arrived
   double t_prev_ = 0.0;
 
-  //! \brief The breaking time of the robot dependent on its velocity
-  double t_break_ = 0.0;
+  //! \brief The brakeing time of the robot dependent on its velocity
+  double t_brake_ = 0.0;
 
   //! \brief The factor with which positions are scaled (used for unit transcription)
   //! Default value used to transform measured mm into m units
@@ -200,6 +207,12 @@ class UDPTransiever {
   //! \brief Contains a list of joint positions (Cartesian) of type Point
   //! for immediate reuse within the calling script
   std::vector<Point> joint_pos_ = {};
+
+  //! \brief Contains the current Cartesian positions of all robot joints
+  std::vector<Point> rob_pos_ = {};
+
+  //! \brief Indicates that the robot has performed a ful stop
+  bool fs_ = false;
 
   //! \brief Contains a list of joint velocities (Cartesian) of type Point
   //! for immediate reuse within the calling script

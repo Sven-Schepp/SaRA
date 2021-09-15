@@ -125,40 +125,40 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-set(REACH_RI_INCLUDE_DIRS "include/reach_lib/include")
+set(SARA_INCLUDE_DIRS "include/ReachLib/include")
 
 include_directories(
   include
   include/reachable_occupancy
   ${catkin_INCLUDE_DIRS}
-  ${REACH_RI_INCLUDE_DIRS}
+  ${SARA_INCLUDE_DIRS}
 )
 
 
-set(REACH_RI_SRC_PATH "include/reach_lib/src")
+set(SARA_SRC_PATH "include/ReachLib/src")
 
-set(REACH_RI_SOURCES
-  ${REACH_RI_SRC_PATH}/articulated.cpp
-  ${REACH_RI_SRC_PATH}/articulated_accel.cpp
-  ${REACH_RI_SRC_PATH}/articulated_vel.cpp
-  ${REACH_RI_SRC_PATH}/articulated_pos.cpp
-  ${REACH_RI_SRC_PATH}/body_part.cpp
-  ${REACH_RI_SRC_PATH}/body_part_accel.cpp
-  ${REACH_RI_SRC_PATH}/body_part_vel.cpp
-  ${REACH_RI_SRC_PATH}/capsule.cpp
-  ${REACH_RI_SRC_PATH}/cylinder.cpp
-  ${REACH_RI_SRC_PATH}/cylinder_perimeter.cpp
-  ${REACH_RI_SRC_PATH}/extremity.cpp
-  ${REACH_RI_SRC_PATH}/occupancy.cpp
-  ${REACH_RI_SRC_PATH}/pedestrian.cpp
-  ${REACH_RI_SRC_PATH}/pedestrian_accel.cpp
-  ${REACH_RI_SRC_PATH}/pedestrian_vel.cpp
-  ${REACH_RI_SRC_PATH}/point.cpp
-  ${REACH_RI_SRC_PATH}/system.cpp
-  ${REACH_RI_SRC_PATH}/sphere.cpp
+set(SARA_SOURCES
+  ${SARA_SRC_PATH}/articulated.cpp
+  ${SARA_SRC_PATH}/articulated_accel.cpp
+  ${SARA_SRC_PATH}/articulated_vel.cpp
+  ${SARA_SRC_PATH}/articulated_pos.cpp
+  ${SARA_SRC_PATH}/body_part.cpp
+  ${SARA_SRC_PATH}/body_part_accel.cpp
+  ${SARA_SRC_PATH}/body_part_vel.cpp
+  ${SARA_SRC_PATH}/capsule.cpp
+  ${SARA_SRC_PATH}/cylinder.cpp
+  ${SARA_SRC_PATH}/cylinder_perimeter.cpp
+  ${SARA_SRC_PATH}/extremity.cpp
+  ${SARA_SRC_PATH}/occupancy.cpp
+  ${SARA_SRC_PATH}/pedestrian.cpp
+  ${SARA_SRC_PATH}/pedestrian_accel.cpp
+  ${SARA_SRC_PATH}/pedestrian_vel.cpp
+  ${SARA_SRC_PATH}/point.cpp
+  ${SARA_SRC_PATH}/system.cpp
+  ${SARA_SRC_PATH}/sphere.cpp
 )
 
-add_library(ReachRI ${REACH_RI_SOURCES})
+add_library(SaRA ${SARA_SOURCES})
 #set_target_properties(ReachRI PROPERTIES IMPORTED_LOCATION src/${PROJECT_NAME}/include/reach_lib/build/libReachRI.a)    ###########################
 
 ## Declare a C++ library
@@ -246,23 +246,29 @@ add_library(ReachRI ${REACH_RI_SOURCES})
 
 
 # Adding the publisher demo
-add_executable(demo_publisher src/demo_publisher.cpp)
+add_executable(SaRA_demo src/SaRA_demo.cpp)
 
-target_link_libraries(demo_publisher ${catkin_LIBRARIES})
-target_link_libraries(demo_publisher ReachRI)
-add_dependencies(demo_publisher demo_publisher_generate_messages_cpp)
+target_link_libraries(SaRA_demo ${catkin_LIBRARIES})
+target_link_libraries(SaRA_demo SaRA)
+add_dependencies(SaRA_demo SaRA_demo_generate_messages_cpp)
+
+add_executable(udp_translator src/udp_translator.cpp)
+
+target_link_libraries(udp_translator ${catkin_LIBRARIES})
+target_link_libraries(udp_translator SaRA)
+add_dependencies(udp_translator udp_translator_generate_messages_cpp)
 
 
 # Adding the udp_receiver
-add_executable(udp_receiver src/udp_receiver.cpp)
+#add_executable(udp_receiver src/udp_receiver.cpp)
 
-target_link_libraries(udp_receiver ${catkin_LIBRARIES})
-target_link_libraries(udp_receiver ReachRI)
-add_dependencies(udp_receiver udp_receiver_generate_messages_cpp)
+#target_link_libraries(udp_receiver ${catkin_LIBRARIES})
+#target_link_libraries(udp_receiver ReachRI)
+#add_dependencies(udp_receiver udp_receiver_generate_messages_cpp)
 
 # Adding main reachable occupancy executable
-add_executable(reachable_occupancy src/reachable_occupancy.cpp)
+#add_executable(reachable_occupancy src/reachable_occupancy.cpp)
 
-target_link_libraries(reachable_occupancy ${catkin_LIBRARIES})
-target_link_libraries(reachable_occupancy ReachRI)
-add_dependencies(reachable_occupancy reachable_occupancy_generate_messages_cpp)
+#target_link_libraries(reachable_occupancy ${catkin_LIBRARIES})
+#target_link_libraries(reachable_occupancy ReachRI)
+#add_dependencies(reachable_occupancy reachable_occupancy_generate_messages_cpp)

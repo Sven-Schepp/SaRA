@@ -290,7 +290,6 @@ std::vector<bool> Validation::capsule_set_intersection(std::vector<reach_lib::Ca
       }
     }
   }
-  std::cout << "Size Intersections: " << intersections.size() <<  " " << 1 << "\n";
   return intersections;
 }
 

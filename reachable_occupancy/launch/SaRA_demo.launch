@@ -1,0 +1,12 @@
+<launch>
+  <arg name="frame_stop" default="150"/>
+  <arg name="ro_path" default="$(find reachable_occupancy)"/>
+  <arg name="mvmt_csv" default="$(arg ro_path)/src/tests/simple_skeleton_mvmt.csv"/>
+  <param name="csv_path" type="str" value="$(arg mvmt_csv)"/>
+  <param name="frame_stop" type="int" value="$(arg frame_stop)"/>
+
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg ro_path)/rviz/cmu_demo_for_images.rviz" required="true"/> <!-- ro_rl_demo.rviz-->
+  <node pkg="reachable_occupancy" type="SaRA_demo" name="SaRA_demo" required="false" output="screen"/>
+  <!-- include file="$(find udp_com)/launch/udp_com.launch"/-->
+</launch>
