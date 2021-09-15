@@ -1,8 +1,8 @@
-# SaRA
+# SaRA: A Tool for Safe Human-Robot Coexistence and Collaboration through Reachability Analysis
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ## Overview
-SaRA implements our approach to reachability analysis in form of set based occupancies (RO). The objective is thereby defined as: providing methods for provably safe human robot interaction that can be easily integrated, improved, and expanded upon. SaRA is defined as a library (reach_lib) containing all functionalities required for RO calculation as well as a [ROS](https://www.ros.org/) package (reachable_occupancy) which includes reach_lib in addition to RO-volume-calculation and RO-visualization in [RViz](http://wiki.ros.org/rviz).
-<br>A short video demostration of occupancies visualized in RViz based on motion capture data from Carnegie Mellon Universities mocap dataset can be found [here](https://www.youtube.com/watch?v=c3yoXZEIwvI).
+SaRA implements our approach to reachability analysis in form of set based reachable occupancy(RO). The objective is thereby defined as: providing methods for provably safe human robot interaction that can be easily integrated, improved, and expanded upon. SaRA consist of a library (Reachlib) containing all functionalities required for RO calculation as well as a [ROS](https://www.ros.org/) package (reachable_occupancy) which includes ReachLib and provides RO-volume-calculation and RO-visualization in [RViz](http://wiki.ros.org/rviz).
+<br>A short video explanation and demonstration of occupancies visualized in RViz based on motion capture data can be found [here](https://www.youtube.com/watch?v=QDYq_FQL1Ds).
 
 <img align="center" src="/images/Acc_Ex.png" alt="drawing" width="350"/>
 
