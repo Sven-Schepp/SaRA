@@ -2,7 +2,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ## Overview
 SaRA implements our formally safe approach to reachability analysis in form of reachable sets [1,2] of humans. The human's reachable sets are given as a union of individual capsules (cylinder with a half sphere at both ends) for each body part. We can formally guarantee safety by executing a failsafe trajectory if an intersections between the human's and robot's reachable sets is detected [1,2]. We additionally provide classes for simplified cylinder based reachable sets as discussed in [3]. SaRA consist of a library (Reachlib) containing all functionalities required for reachability analysis as well as a [ROS](https://www.ros.org/) package (reachable_occupancy) which includes ReachLib and provides volume calculation and visualization in [RViz](http://wiki.ros.org/rviz). Both the C++ library as well as the ROS-package can be easily integrated, improved, and expanded upon.<br>
-We utilize live captured Cartesian positions of human joints calculated from motion captured markers (shown in the figure below). Our efficient implementation is capable of calculating reachable sets and determines intersections between human and robotic reachable sets in only a few microseconds. The tool extends our previous work in [1,2] and is described in detail in our contribution to ICRA 2022.
+We utilize live captured Cartesian positions of human joints calculated from motion captured markers (shown in the figure below). Our efficient implementation is capable of calculating reachable sets and determines intersections between human and robotic reachable sets in only a few microseconds. The tool extends our previous work in [1,2] and is described in detail in our contribution to ICRA 2022. Minimal steps for an executable demo are given in section [Demo](#demo).
 <br>A short video explanation and demonstration of reachable sets visualized in RViz based on motion capture data can be found [here](https://www.youtube.com/watch?v=QDYq_FQL1Ds).
 
 <p align="center">
@@ -21,7 +21,7 @@ We utilize live captured Cartesian positions of human joints calculated from mot
 - [Installing reachable_occupancy](#installing-reachable_occupancy)
 - [Repository Structure](#repository-structure)
 - [Software and Hardware](#software-and-hardware)
-- [Commands](#commands)
+- [Demo](#demo)
 - [License](#license)
 
 
