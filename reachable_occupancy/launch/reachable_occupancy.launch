@@ -6,7 +6,6 @@
   <param name="frame_stop" type="int" value="$(arg frame_stop)"/>
 
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg ro_path)/rviz/ro_rl_demo.rviz" required="true"/>
-  <node pkg="reachable_occupancy" type="SaRA_demo" name="SaRA_demo" required="false" output="screen"/>
-  <!-- include file="$(find udp_com)/launch/udp_com.launch"/-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg ro_path)/rviz/ro_rl_demo.rviz" required="true"/> <!-- ro_rl_demo.rviz-->
+  <node pkg="reachable_occupancy" type="reachable_occupancy" name="reachable_occupancy" required="true" output="screen"/>
 </launch>

@@ -27,7 +27,6 @@ along with Foobar.  If not, see https://www.gnu.org/licenses/.
 #include "validation.cpp"
 #include "visualizer.cpp"
 #include "volume.cpp"
-#include "udp_transiever.cpp"
 
 #include "visualization_msgs/MarkerArray.h"
 
@@ -38,8 +37,6 @@ typedef visualizer::Visualizer Visualizer;
 typedef validation::Validation Validation;
 
 typedef volume::Volume Volume;
-
-typedef udp_transiever::UDPTransiever UDPTransiever;
 
 
 //! \brief Receives robot and human data
@@ -173,10 +170,10 @@ int main(int argc, char** argv) {
   bool scenery = true;
     // Occupancy calculation parameters
   bool calc_articulated_acc = false;
-  bool calc_articulated_vel = false;
+  bool calc_articulated_vel = true;
   bool calc_articulated_pos = false;
   bool calc_pedestrian_acc = false;
-  bool calc_pedestrian_vel = true;
+  bool calc_pedestrian_vel = false;
     // System parameters
   double measurement_uncertainty_pos = 0.0;
   double measurement_uncertainty_vel = 0.0;
@@ -538,58 +535,16 @@ int main(int argc, char** argv) {
   }
 
   //// UDP architecture
-  UDPTransiever tsv = UDPTransiever();
-  UDPTransiever tsv_rob = UDPTransiever();
   ros::Subscriber frame_data_subscriber;
   ros::Subscriber robot_subscriber;
-  ros::Subscriber frame_data_subscriber_udp_recorded;
-  ros::Subscriber robot_subscriber_udp_recorded;
 
   // Non UDP receivers
   Receiver rv;
-  if (use_udp_transmission) {
-    // Open port for joint positions
-    tsv.set_joint_num(joint_num);
-    tsv.set_scale(scale_human_pos);
-    tsv.set_client_ip(ip_receive);
-    tsv.set_serv_ip(ip_send);
-    tsv.set_port(port_human_pos);
-    if (!UDPTransiever::create_socket(nh, ip_receive, ip_send, port_human_pos, false)) {
-      ROS_WARN("Socket Not Connected %d!",port_human_pos);
-    }
-
-    // Subscribe to port topic opened by ROS_UDP
-    frame_data_subscriber = nh.subscribe("udp/p" + std::to_string(port_human_pos), 1000,
-                                         &udp_transiever::UDPTransiever::udp_callback, &tsv);
-
-    // Open port for robot capsules
-    if (use_robot_capsules) {
-      tsv_rob.set_joint_num(capsule_num);
-      tsv_rob.set_scale(scale_robot_capsules);
-      tsv_rob.set_client_ip(ip_receive);
-      tsv_rob.set_serv_ip(ip_send);
-      tsv_rob.set_port(port_robot_capsules);
-      if (!UDPTransiever::create_socket(nh, ip_receive, ip_send, port_robot_capsules, false)) {
-        ROS_WARN("Socket Not Connected %d!", port_robot_capsules);
-      }
-
-      // Subscribe to port topic opened by ROS_UDP
-      robot_subscriber = nh.subscribe("udp/p" + std::to_string(port_robot_capsules), 1000,
-                                      &udp_transiever::UDPTransiever::robot_callback, &tsv_rob);
-    }
-  } else {
-    frame_data_subscriber = nh.subscribe(joint_topic, 1000,
-                                         &Receiver::human_callback, &rv);
-    /*
-    frame_data_subscriber_udp_recorded = nh.subscribe(joint_topic, 1000,
-                                         &udp_transiever::UDPTransiever::udp_callback, &tsv);*/
-    if (use_robot_capsules) {
-      robot_subscriber = nh.subscribe(robot_topic, 1000,
-                                       &Receiver::robot_callback, &rv);
-      /*
-      robot_subscriber_udp_recorded = nh.subscribe(robot_topic, 1000,
-                                       &udp_transiever::UDPTransiever::robot_callback, &tsv_rob);*/              
-    }
+  frame_data_subscriber = nh.subscribe(joint_topic, 1000,
+                                       &Receiver::human_callback, &rv);
+  if (use_robot_capsules) {
+    robot_subscriber = nh.subscribe(robot_topic, 1000,
+                                    &Receiver::robot_callback, &rv);              
   }
 
   //// Publishing data
@@ -749,129 +704,36 @@ int main(int argc, char** argv) {
     visualization_msgs::MarkerArray marr = {};
 
     // Get current breaking time of the robot
-    if (tsv_rob.get_t_brake() > 0.0 && use_udp_transmission) {
-      t_b = tsv_rob.get_t_brake();
-    }
-    if (!use_udp_transmission) {
-      t_a = rv.t_a;
-      t_b = rv.get_t_brake();
-    }
+    t_a = rv.t_a;
+    t_b = rv.get_t_brake();
 
     // Update chosen models
-    if (use_udp_transmission) {
-      if (tsv.get_joint_pos().size() > 0) {
-        if (calc_articulated_acc) {
-          articulated_acc.update(t_a, t_b, tsv.get_joint_pos(), tsv.get_joint_vel());
-        }
-        if (calc_articulated_vel) {
-          articulated_vel.update(t_a, t_b, tsv.get_joint_pos());
-        }
-        if (calc_articulated_pos) {
-          std::vector<reach_lib::Point> temp = {};
-          for (const auto& it : extremity_joints) {
-            temp.push_back(tsv.get_joint_pos()[it]);
-          }
-          articulated_pos.update(t_a, t_b, temp);
-        }
-        if (calc_pedestrian_acc) {
-          pedestrian_acc.update(t_a, t_b, {tsv.get_joint_pos()[pedestrian_center_joint]},
-                                {tsv.get_joint_vel()[pedestrian_center_joint]});
-        }
-        if (calc_pedestrian_vel) {
-          pedestrian_vel.update(t_a, t_b, {tsv.get_joint_pos()[pedestrian_center_joint]});
-        }
+    if (rv.get_joint_pos().size() > 0) {
+      if (calc_articulated_acc) {
+        articulated_acc.update(t_a, t_b, rv.get_joint_pos(), rv.get_joint_vel());
       }
-    } else {
-      if (rv.get_joint_pos().size() > 0) {
-        if (calc_articulated_acc) {
-          articulated_acc.update(t_a, t_b, rv.get_joint_pos(), rv.get_joint_vel());
+      if (calc_articulated_vel) {
+        articulated_vel.update(t_a, t_b, rv.get_joint_pos());
+      }
+      if (calc_articulated_pos) {
+        std::vector<reach_lib::Point> temp = {};
+        for (const auto& it : extremity_joints) {
+          temp.push_back(rv.get_joint_pos()[it]);
         }
-        if (calc_articulated_vel) {
-          articulated_vel.update(t_a, t_b, rv.get_joint_pos());
-        }
-        if (calc_articulated_pos) {
-          std::vector<reach_lib::Point> temp = {};
-          for (const auto& it : extremity_joints) {
-            temp.push_back(rv.get_joint_pos()[it]);
-          }
-          articulated_pos.update(t_a, t_b, rv.get_joint_pos());
-        }
-        if (calc_pedestrian_acc) {
-          pedestrian_acc.update(t_a, t_b, {rv.get_joint_pos()[pedestrian_center_joint]},
-                                {rv.get_joint_vel()[pedestrian_center_joint]});
-        }
-        if (calc_pedestrian_vel) {
-          pedestrian_vel.update(t_a, t_b, {rv.get_joint_pos()[pedestrian_center_joint]});
-        }
+        articulated_pos.update(t_a, t_b, rv.get_joint_pos());
+      }
+      if (calc_pedestrian_acc) {
+        pedestrian_acc.update(t_a, t_b, {rv.get_joint_pos()[pedestrian_center_joint]},
+                              {rv.get_joint_vel()[pedestrian_center_joint]});
+      }
+      if (calc_pedestrian_vel) {
+        pedestrian_vel.update(t_a, t_b, {rv.get_joint_pos()[pedestrian_center_joint]});
       }
     }
+    
 
     // Validate occupancies / determine intersections with robot capsules and visualize them
-    if (use_validation && tsv.get_joint_pos().size() > 0) {
-      // Check for intersections with robot capsules
-      std::vector<bool> articulated_acc_hr_intersect = articulated_acc_val.capsule_set_intersection(
-      reach_lib::get_capsules(articulated_acc), tsv_rob.get_robot_capsules());
-      std::vector<bool> articulated_vel_hr_intersect = articulated_vel_val.capsule_set_intersection(
-      reach_lib::get_capsules(articulated_vel), tsv_rob.get_robot_capsules());
-      std::vector<bool> articulated_pos_hr_intersect = articulated_pos_val.capsule_set_intersection(
-      reach_lib::get_capsules(articulated_pos), tsv_rob.get_robot_capsules());
-      std::vector<bool> pedestrian_acc_hr_intersect = pedestrian_acc_val.cylinder_capsule_set_intersction(
-      reach_lib::get_cylinders(pedestrian_acc), tsv_rob.get_robot_capsules());
-      std::vector<bool> pedestrian_vel_hr_intersect = pedestrian_vel_val.cylinder_capsule_set_intersction(
-      reach_lib::get_cylinders(pedestrian_vel), tsv_rob.get_robot_capsules());
-
-      articulated_acc_val.validation(articulated_acc, t_b, tsv.get_joint_pos());
-      articulated_vel_val.validation(articulated_vel, t_b, tsv.get_joint_pos());
-      articulated_pos_val.validation(articulated_pos, t_b, tsv.get_joint_pos());
-      pedestrian_acc_val.validation(pedestrian_acc, t_b, tsv.get_joint_pos());
-      pedestrian_vel_val.validation(pedestrian_vel, t_b, tsv.get_joint_pos());
-
-      if (articulated_acc_val.get_a_accel().size() >= articulated_acc_val.get_backlog()) {
-        std::vector<reach_lib::Capsule> caps = {};
-        for (auto& it : articulated_acc_val.get_a_pos()
-            [articulated_acc_val.get_val_counter()[2]].first.get_occupancy()) {
-          caps.push_back(it.get_occupancy());
-        }
-        if (vis_validated) {
-          articulated_acc_vis.vis_capsules(caps, articulated_acc_hr_intersect);
-        }
-      }
-      if (articulated_vel_val.get_a_vel().size() >= articulated_vel_val.get_backlog()) {
-        std::vector<reach_lib::Capsule> caps = {};
-        for (auto& it : articulated_vel_val.get_a_pos()
-            [articulated_vel_val.get_val_counter()[2]].first.get_occupancy()) {
-          caps.push_back(it.get_occupancy());
-        }
-        if (vis_validated) {
-          articulated_vel_vis.vis_capsules(caps, articulated_vel_hr_intersect);
-        }
-      }
-      if (articulated_pos_val.get_a_pos().size() >= articulated_pos_val.get_backlog()) {
-        std::vector<reach_lib::Capsule> caps = {};
-        for (auto& it : articulated_pos_val.get_a_pos()
-            [articulated_pos_val.get_val_counter()[2]].first.get_occupancy()) {
-          caps.push_back(it.get_occupancy());
-        }
-        if (vis_validated) {
-          articulated_pos_vis.vis_capsules(caps, articulated_pos_hr_intersect);
-        }
-      }
-      if (pedestrian_acc_val.get_p_accel().size() >= pedestrian_acc_val.get_backlog()) {
-        reach_lib::PedestrianAccel* p_a = &pedestrian_acc_val.get_p_accel()
-        [pedestrian_acc_val.get_val_counter()[3]].first;
-        if (vis_validated) {
-          articulated_acc_vis.vis_pedestrian(p_a, pedestrian_acc_hr_intersect);
-        }
-      }
-      if (pedestrian_vel_val.get_p_vel().size() >= pedestrian_vel_val.get_backlog()) {
-        reach_lib::PedestrianVel* p_v = &pedestrian_vel_val.get_p_vel()
-        [pedestrian_vel_val.get_val_counter()[3]].first;
-        if (vis_validated) {
-          articulated_vel_vis.vis_pedestrian(p_v, pedestrian_vel_hr_intersect);
-        }
-      }
-    }
-    if (use_validation && rv.get_joint_pos().size() > 0 && !use_udp_transmission) {
+    if (use_validation && rv.get_joint_pos().size() > 0) {
       // Check for intersections with robot capsules
       std::vector<bool> articulated_acc_hr_intersect = articulated_acc_val.capsule_set_intersection(
       reach_lib::get_capsules(articulated_acc), rv.get_robot_capsules());
@@ -937,75 +799,39 @@ int main(int argc, char** argv) {
     }
 
     // Calculate volume
-    if (rv.get_joint_pos().size() > 0 && !use_udp_transmission) {
-      if (use_volume[0]) {
-        if (smart_origin != -1 && smart_origin < tsv.get_joint_pos().size()) {
-          articulated_acc_vol.set_origin(tsv.get_joint_pos()[smart_origin]);
-        }
-        articulated_acc_vol.volume_routine(articulated_acc);
+    if (use_volume[0]) {
+      if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
+        articulated_acc_vol.set_origin(rv.get_joint_pos()[smart_origin]);
       }
-      if (use_volume[1]) {
-        if (smart_origin != -1 && smart_origin < tsv.get_joint_pos().size()) {
-          articulated_vel_vol.set_origin(tsv.get_joint_pos()[smart_origin]);
-        }
-        articulated_vel_vol.volume_routine(articulated_vel);
+      articulated_acc_vol.volume_routine(articulated_acc);
+    }
+    if (use_volume[1]) {
+      if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
+        articulated_vel_vol.set_origin(rv.get_joint_pos()[smart_origin]);
       }
-      if (use_volume[2]) {
-        if (smart_origin != -1 && smart_origin < tsv.get_joint_pos().size()) {
-          articulated_pos_vol.set_origin(tsv.get_joint_pos()[smart_origin]);
-        }
-        articulated_pos_vol.volume_routine(articulated_pos);
+      articulated_vel_vol.volume_routine(articulated_vel);
+    }
+    if (use_volume[2]) {
+      if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
+        articulated_pos_vol.set_origin(rv.get_joint_pos()[smart_origin]);
       }
-      if (use_volume[3]) {
-        if (smart_origin != -1 && smart_origin < tsv.get_joint_pos().size()) {
-          pedestrian_acc_vol.set_origin(tsv.get_joint_pos()[smart_origin]);
-        }
-        pedestrian_acc_vol.volume_routine(pedestrian_acc);
+      articulated_pos_vol.volume_routine(articulated_pos);
+    }
+    if (use_volume[3]) {
+      if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
+        pedestrian_acc_vol.set_origin(rv.get_joint_pos()[smart_origin]);
       }
-      if (use_volume[4]) {
-        if (smart_origin != -1 && smart_origin < tsv.get_joint_pos().size()) {
-          pedestrian_vel_vol.set_origin(tsv.get_joint_pos()[smart_origin]);
-        }
-        pedestrian_vel_vol.volume_routine(pedestrian_vel);
+      pedestrian_acc_vol.volume_routine(pedestrian_acc);
+    }
+    if (use_volume[4]) {
+      if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
+        pedestrian_vel_vol.set_origin(rv.get_joint_pos()[smart_origin]);
       }
-    } else {
-      if (use_volume[0]) {
-        if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
-          articulated_acc_vol.set_origin(rv.get_joint_pos()[smart_origin]);
-        }
-        articulated_acc_vol.volume_routine(articulated_acc);
-      }
-      if (use_volume[1]) {
-        if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
-          articulated_vel_vol.set_origin(rv.get_joint_pos()[smart_origin]);
-        }
-        articulated_vel_vol.volume_routine(articulated_vel);
-      }
-      if (use_volume[2]) {
-        if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
-          articulated_pos_vol.set_origin(rv.get_joint_pos()[smart_origin]);
-        }
-        articulated_pos_vol.volume_routine(articulated_pos);
-      }
-      if (use_volume[3]) {
-        if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
-          pedestrian_acc_vol.set_origin(rv.get_joint_pos()[smart_origin]);
-        }
-        pedestrian_acc_vol.volume_routine(pedestrian_acc);
-      }
-      if (use_volume[4]) {
-        if (smart_origin != -1 && smart_origin < rv.get_joint_pos().size()) {
-          pedestrian_vel_vol.set_origin(rv.get_joint_pos()[smart_origin]);
-        }
-        pedestrian_vel_vol.volume_routine(pedestrian_vel);
-      }
+      pedestrian_vel_vol.volume_routine(pedestrian_vel);
     }
 
     // Visualizing joints and in/out points clouds
     if (use_visualization) {
-      if (vis_joints && tsv.get_joint_pos().size() > 0 && use_udp_transmission) {
-        joint_vis.vis_point_cloud(tsv.get_joint_pos(), "joint_positions");
-      }
       if (vis_joints && rv.get_joint_pos().size() > 0 && !use_udp_transmission) {
         joint_vis.vis_point_cloud(rv.get_joint_pos(), "joint_positions");
       }
@@ -1050,9 +876,6 @@ int main(int argc, char** argv) {
         pedestrian_vel_vis.vis_pedestrian(pedestrian_vel_p);
       }
       // Robot occupancies
-      if (tsv_rob.get_robot_capsules().size() > 0 && use_robot_capsules && use_udp_transmission) {
-        robot_capsule_vis.vis_capsules(tsv_rob.get_robot_capsules());
-      }
       if (rv.get_robot_capsules().size() > 0 && use_robot_capsules && !use_udp_transmission) {
         robot_capsule_vis.vis_capsules(rv.get_robot_capsules());
       }
@@ -1226,9 +1049,6 @@ int main(int argc, char** argv) {
       pub_vis.publish(articulated_pos_vis.markers_);
       pub_vis.publish(pedestrian_acc_vis.markers_);
       pub_vis.publish(pedestrian_vel_vis.markers_);
-      if (use_robot_capsules && tsv.get_robot_capsules().size() > 0 && use_udp_transmission) {
-        pub_vis.publish(robot_capsule_vis.markers_);
-      }
       if (use_robot_capsules && rv.get_robot_capsules().size() > 0 && !use_udp_transmission) {
         pub_vis.publish(robot_capsule_vis.markers_);
       }

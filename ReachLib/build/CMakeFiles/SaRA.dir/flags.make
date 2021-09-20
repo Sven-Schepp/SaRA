@@ -6,5 +6,5 @@ CXX_FLAGS = -O3 -DNDEBUG
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/sven/Desktop/SaRA/SaRA/ReachLib/include 
+CXX_INCLUDES = -I/home/sven/catkin_ws/src/reachable_occupancy/include/ReachLib/include 
 

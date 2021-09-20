@@ -246,17 +246,12 @@ add_library(SaRA ${SARA_SOURCES})
 
 
 # Adding the publisher demo
-add_executable(SaRA_demo src/SaRA_demo.cpp)
 
-target_link_libraries(SaRA_demo ${catkin_LIBRARIES})
-target_link_libraries(SaRA_demo SaRA)
-add_dependencies(SaRA_demo SaRA_demo_generate_messages_cpp)
+#add_executable(udp_translator src/udp_translator.cpp)
 
-add_executable(udp_translator src/udp_translator.cpp)
-
-target_link_libraries(udp_translator ${catkin_LIBRARIES})
-target_link_libraries(udp_translator SaRA)
-add_dependencies(udp_translator udp_translator_generate_messages_cpp)
+#target_link_libraries(udp_translator ${catkin_LIBRARIES})
+#target_link_libraries(udp_translator SaRA)
+#add_dependencies(udp_translator udp_translator_generate_messages_cpp)
 
 
 # Adding the udp_receiver
@@ -266,9 +261,16 @@ add_dependencies(udp_translator udp_translator_generate_messages_cpp)
 #target_link_libraries(udp_receiver ReachRI)
 #add_dependencies(udp_receiver udp_receiver_generate_messages_cpp)
 
-# Adding main reachable occupancy executable
+# Adding main reachable occupancy executable dependent on udp_com
 #add_executable(reachable_occupancy src/reachable_occupancy.cpp)
 
 #target_link_libraries(reachable_occupancy ${catkin_LIBRARIES})
-#target_link_libraries(reachable_occupancy ReachRI)
+#target_link_libraries(reachable_occupancy SaRA)
 #add_dependencies(reachable_occupancy reachable_occupancy_generate_messages_cpp)
+
+# Adding main reachable occupancy executable without dependecy on udp_com
+add_executable(reachable_occupancy src/reachable_occupancy_no_udp.cpp)
+
+target_link_libraries(reachable_occupancy ${catkin_LIBRARIES})
+target_link_libraries(reachable_occupancy SaRA)
+add_dependencies(reachable_occupancy reachable_occupancy_generate_messages_cpp)

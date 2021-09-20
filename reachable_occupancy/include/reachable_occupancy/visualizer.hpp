@@ -146,6 +146,11 @@ class Visualizer{
   //! \param[in] id_domain The rough decimal domain in which marker ids are placed
   void set_id_map(int num_caps, int id_domain);
 
+  //! \brief Returns the currently used id_map
+  std::vector<std::tuple<std::string, int>> get_id_map() {
+    return this->id_map_;
+  }
+
   //! \brief Sets the frame_id parameter.
   //! \param[in] frame_id The frame_id used to assign a frame to the occupacy in rviz.
   void set_frame_id(std::string frame_id);
