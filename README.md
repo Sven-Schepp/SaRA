@@ -255,13 +255,13 @@ Open a terminal in your `catkin_ws` directory. Default location: `cd ~/catkin_ws
 Compile your workspace: `catkin_make`<br>
 In `catkin_ws`:<br>
 - `source devel/setup.bash`.
-- Copy the `SaRA_demo` executable into `catkin_ws/devel/lib/reachable_occupancy/`.
-- Launch rviz with the provided config file: "roslaunch reachable_occupancy rviz_demo.launch".
-- Run the executable in a separate terminal "rosrun reachable_occupancy SaRA_demo".
-- Finally, play one of the chosen bag files provided in the experiments folder: `rosbag play punch.bag`<br><br>
+- Copy the `/executables/SaRA_demo` executable into `catkin_ws/devel/lib/reachable_occupancy/`.
+- Launch rviz and the demo with the provided launch file: "roslaunch reachable_occupancy SaRA_demo.launch".
+- Finally, play one of the chosen bag files contained in the experiments folder: `rosbag play punch.bag`<br><br>
 Your visualization should open an RViz instance and display our test environment (two tables in a room)<br>
 You should then see the robot (pink) and human reachable sets (blue).
-Add these commands to tasks.json in [VSCode](https://code.visualstudio.com/) for convenience.
+Add these commands to tasks.json in [VSCode](https://code.visualstudio.com/) for convenience.<br>
+We additionally provide a compiled executable version of our main script. The compiled script can be used just like our demo executable above.
 
 ## Resources
 [1] M. Althoff, A. Giusti, S. B. Liu, and A. Pereira, “Effortless creationof  safe  robots  from  modules  through  self-programming  and  self-verification,”Science Robotics, vol. 4, no. 31, Jun 2019<br><br>
