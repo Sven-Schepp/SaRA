@@ -159,7 +159,7 @@ int main(int argc, char** argv) {
   int port_human_pos = 8080;
   int port_robot_capsules = 8079;
   int joint_num = 8;
-  int capsule_num = 11;
+  int rob_capsule_num = 11;
   double scale_human_pos = 1.0/1000.0;
   double scale_robot_capsules = 1.0/1.0;
     // ROS topic reception and publishing parameters
@@ -280,7 +280,7 @@ int main(int argc, char** argv) {
     if(ros::param::has("/capsule_num")){
     int temp = 0;
     ros::param::get("/capsule_num",temp);
-    capsule_num = temp;
+    rob_capsule_num = temp;
     }
     if(ros::param::has("/scale_human_pos")){
     int temp = 0;
@@ -564,7 +564,7 @@ int main(int argc, char** argv) {
 
     // Open port for robot capsules
     if (use_robot_capsules) {
-      tsv_rob.set_joint_num(capsule_num);
+      tsv_rob.set_joint_num(rob_capsule_num);
       tsv_rob.set_scale(scale_robot_capsules);
       tsv_rob.set_client_ip(ip_receive);
       tsv_rob.set_serv_ip(ip_send);

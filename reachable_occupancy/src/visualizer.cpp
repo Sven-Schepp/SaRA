@@ -528,6 +528,8 @@ void Visualizer::color_gradient(std_msgs::ColorRGBA start, std_msgs::ColorRGBA e
 }
 }  // namespace visualizer
 
+
+// Demo python code for color gradients
 /*
 sh.coldis = (1.5,20)
 sh.lin_gradient((255,0,0), (255,255,0), sh.coldis[1]/2)

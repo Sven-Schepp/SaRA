@@ -81,31 +81,34 @@ void UDPTransiever::udp_callback(udp_com::UdpPacket data) {
   }
 
   if (this->joint_pos_.size() > 0) {
-    // Get virtual clav position
-    geometry_msgs::Point clv;
-    clv.x = joint_positions[3].x + 0.5*(joint_positions[0].x - joint_positions[3].x);
-    clv.y = joint_positions[3].y + 0.5*(joint_positions[0].y - joint_positions[3].y);
-    clv.z = joint_positions[3].z + 0.5*(joint_positions[0].z - joint_positions[3].z);
-    joint_positions.push_back(clv);
+    // Get virtual clav position of desired; SET HERE
+    bool get_virtual_joints = true;
+    if (get_virtual_joints) {
+      geometry_msgs::Point clv;
+      clv.x = joint_positions[3].x + 0.5*(joint_positions[0].x - joint_positions[3].x);
+      clv.y = joint_positions[3].y + 0.5*(joint_positions[0].y - joint_positions[3].y);
+      clv.z = joint_positions[3].z + 0.5*(joint_positions[0].z - joint_positions[3].z);
+      joint_positions.push_back(clv);
 
-    Point clv_r;
-    clv_r.x = clv.x;
-    clv_r.y = clv.y;
-    clv_r.z = clv.z;
-    this->joint_pos_.push_back(clv_r);
+      Point clv_r;
+      clv_r.x = clv.x;
+      clv_r.y = clv.y;
+      clv_r.z = clv.z;
+      this->joint_pos_.push_back(clv_r);
 
-    // Get virtual strn position
-    geometry_msgs::Point strn;
-    strn.x = joint_positions[8].x + 0.7*(joint_positions[8].x - joint_positions[6].x);
-    strn.y = joint_positions[8].y + 0.7*(joint_positions[8].y - joint_positions[6].y);
-    strn.z = joint_positions[8].z + 1.8*(joint_positions[8].z - joint_positions[6].z);
-    joint_positions.push_back(strn);
+      // Get virtual strn position
+      geometry_msgs::Point strn;
+      strn.x = joint_positions[8].x + 0.7*(joint_positions[8].x - joint_positions[6].x);
+      strn.y = joint_positions[8].y + 0.7*(joint_positions[8].y - joint_positions[6].y);
+      strn.z = joint_positions[8].z + 1.8*(joint_positions[8].z - joint_positions[6].z);
+      joint_positions.push_back(strn);
 
-    Point strn_r;
-    strn_r.x = strn.x;
-    strn_r.y = strn.y;
-    strn_r.z = strn.z;
-    this->joint_pos_.push_back(strn_r);
+      Point strn_r;
+      strn_r.x = strn.x;
+      strn_r.y = strn.y;
+      strn_r.z = strn.z;
+      this->joint_pos_.push_back(strn_r);
+    }
   }
 
   // There are no previous positions for velocity calculation at t = 0
@@ -136,7 +139,6 @@ void UDPTransiever::udp_callback(udp_com::UdpPacket data) {
       if (this->last_correct_[i].second == 1 && Point::norm(this->joint_pos_[i], this->last_correct_[i].first) < region_radius) {
         this->last_correct_[i].first = this->joint_pos_[i];
         this->last_correct_[i].second = 0;
-        // std::cout << "Returned: " << i << " " << Point::norm(this->joint_pos_[i], this->last_correct_[i].first) << " " << this->joint_pos_[i].z << " " << this->last_correct_[i].first.z << "\n";
       }
     }
   }

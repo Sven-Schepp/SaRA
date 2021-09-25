@@ -2,9 +2,46 @@
   <arg name="frame_stop" default="150"/>
   <arg name="ro_path" default="$(find reachable_occupancy)"/>
   <arg name="mvmt_csv" default="$(arg ro_path)/src/tests/simple_skeleton_mvmt.csv"/>
+  <arg name="use_ros_params" default="true"/>
+  <arg name="use_udp_transmission" default="false"/>
+  <arg name="use_robot_capsules" default="true"/>
+  <arg name="joint_num" default="8"/>
+  <arg name="rob_capsule_num" default="11"/>
+  <arg name="timing_on" default="false"/>
+  <arg name="scenery" default="true"/>
+  <arg name="measurement_uncertainty_pos" default="0.004"/>
+  <arg name="measurement_uncertainty_vel" default="0.04"/>
+  <arg name="use_visualization" default="true"/>
+  <arg name="vis_joints" default="true"/>
+  <arg name="calc_articulated_pos" default="false"/>
+  <arg name="calc_articulated_vel" default="true"/>
+  <arg name="calc_articulated_acc" default="false"/>
+  <arg name="calc_pedestrian_vel" default="false"/>
+  <arg name="calc_pedestrian_acc" default="false"/>
+
   <param name="csv_path" type="str" value="$(arg mvmt_csv)"/>
   <param name="frame_stop" type="int" value="$(arg frame_stop)"/>
 
+
+  <rosparam file = "$(arg ro_path)/config/reachable_occupancy.yaml" />
+
+  <param name="use_ros_params" type="bool" value="$(arg use_ros_params)"/>
+  <param name="use_udp_transmission" type="bool" value="$(arg use_udp_transmission)"/>
+  <param name="use_robot_capsules" type="bool" value="$(arg use_robot_capsules)"/>
+  <param name="joint_num" type="int" value="$(arg joint_num)"/>
+  <param name="rob_capsule_num" type="int" value="$(arg rob_capsule_num)"/>
+  <param name="timing_on" type="bool" value="$(arg timing_on)"/>
+  <param name="scenery" type="bool" value="$(arg scenery)"/>
+  <param name="measurement_uncertainty_pos" type="double" value="$(arg measurement_uncertainty_pos)"/>
+  <param name="measurement_uncertainty_vel" type="double" value="$(arg measurement_uncertainty_vel)"/>
+  <param name="use_visualization" type="bool" value="$(arg use_visualization)"/>
+  <param name="vis_joints" type="bool" value="$(arg vis_joints)"/>
+  <param name="calc_articulated_pos" type="bool" value="$(arg calc_articulated_pos)"/>
+  <param name="calc_articulated_vel" type="bool" value="$(arg calc_articulated_vel)"/>
+  <param name="calc_articulated_acc" type="bool" value="$(arg calc_articulated_acc)"/>
+  <param name="calc_pedestrian_vel" type="bool" value="$(arg calc_pedestrian_vel)"/>
+  <param name="calc_pedestrian_acc" type="bool" value="$(arg calc_pedestrian_acc)"/>
+  
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg ro_path)/rviz/ro_rl_demo.rviz" required="true"/> <!-- ro_rl_demo.rviz-->
   <node pkg="reachable_occupancy" type="reachable_occupancy" name="reachable_occupancy" required="true" output="screen"/>

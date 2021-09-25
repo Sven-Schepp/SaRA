@@ -1,0 +1,180 @@
+use_ros_params: true
+use_udp_transmission: false
+ip_receive: "192.168.7.13"
+ip_send: "192.168.7.1"
+port_human_pos: 8080
+port_robot_capsules: 8079
+joint_num: 8
+rob_capsule_num: 11
+scale_human_pos: 0.001
+scale_robot_capsules: 1.0
+robot_topic: "/SaRA_demo_robot_capsules"
+joint_topic: /SaRA_demo_human_capsules
+vis_pub_topic: "/visualization_marker_array"
+occupancy_topic: "/occupancies"
+timing_on: false
+scenery: true
+calc_articulated_pos: false
+calc_articulated_vel: true
+calc_articulated_acc: false
+calc_pedestrian_vel: false
+calc_pedestrian_acc: false
+measurement_uncertainties_pos: 0.004
+measurement_uncertainties_vel: 0.04
+body_parts_names:
+- "RightUpperArm"
+- "RightForeArm"
+- "RightHand"
+- "LeftUpperArm"
+- "LeftForeArm"
+- "LeftHand"
+- "Torso"
+- "Head"
+body_parts_joint_1:
+- 3
+- 4
+- 5
+- 0
+- 1
+- 2
+- 8
+- 6
+body_parts_joint_2:
+- 4
+- 5
+- 5
+- 1
+- 2
+- 2
+- 9
+- 6
+articulated_max_a:
+- 50.0
+- 50.0
+- 50.0
+- 50.0
+- 50.0
+- 50.0
+- 30.0
+- 2.0
+- 20.0
+- 20.0
+articulated_max_v:
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+- 2.0
+body_part_thickness:
+- 0.1
+- 0.1
+- 0.205
+- 0.1
+- 0.1
+- 0.205
+- 0.3
+- 0.3
+extremities_names:
+- "RightArm"
+- "LeftArm"
+extremity_joints:
+- 3
+- 0
+extremity_max_v:
+- 2.46
+- 0.0
+- 0.0
+- 2.46
+extremity_length:
+- 0.635
+- 0.0
+- 0.0
+- 0.635
+extremity_thickness:
+- 0.205
+- 0.0
+- 0.0
+- 0.205
+pedestrian_arm_span: 1.8
+pedestrian_height: 3.0
+pedestrian_max_a: 10.0
+pedestrian_max_v: 2.0
+coordinate_offset: -1.1
+pedestrian_center_joint: 8
+use_visualization: true
+vis_validated: false
+vis_joints: true
+color_articulated_pos:
+- 0.0
+- 0.0
+- 1.0
+- 0.6
+color_articulated_vel:
+- 0.0
+- 0.0
+- 1.0
+- 0.6
+color_articulated_acc:
+- 0.0
+- 0.0
+- 1.0
+- 0.6
+color_pedestrian_vel:
+- 0.0
+- 0.0
+- 1.0
+- 0.6
+color_pedestrian_acc:
+- 0.0
+- 0.0
+- 1.0
+- 0.6
+color_robot_capsule:
+- 1.0
+- 0.0
+- 1.0
+- 0.6
+color_joints:
+- 1.0
+- 0.0
+- 0.0
+- 1.0
+color_points_in:
+- 1.0
+- 0.0
+- 0.0
+- 1.0
+color_points_out:
+- 0.0
+- 1.0
+- 0.0
+- 1.0
+display_grid:
+- false
+- false
+- false
+- false
+- false
+frame_duration: 0.016666666667
+origin_grid:
+- 0.0
+- 0.0
+- 0.0
+grid_size:
+- 3.0
+- 3.0
+- 3.0
+grid_resolution:
+- 0.1
+use_volume:
+- false
+- false
+- false
+- false
+- false
+smart_origin: 8
