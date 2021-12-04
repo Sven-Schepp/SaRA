@@ -125,7 +125,7 @@ The functions within reachable_occupancy can be used in your own ROS project aft
 To visualize received or calculated occupancies within RViz, a visualization node of type reachable_occupancy/reachable_occupancy can be called while an instance of RViz is running. Designing a self defined visualization node using the `Visualizer` class within reachable_occupancy is also a viable option. This can be done as follows:
 ```cpp
 #include "reach_lib.hpp"
-#incldue "visualizer.hpp"
+#include "visualizer.hpp"
 
 // Define ros_node, node handle (nh), rate ...
 // Define marker publisher
