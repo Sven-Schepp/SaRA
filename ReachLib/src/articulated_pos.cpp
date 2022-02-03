@@ -19,6 +19,7 @@ along with Foobar.  If not, see https://www.gnu.org/licenses/.
 #include <string>
 #include <utility>
 #include <vector>
+#include <assert.h>
 
 #include "articulated.hpp"
 #include "articulated_pos.hpp"
@@ -38,6 +39,8 @@ ArticulatedPos::ArticulatedPos(System system, std::map<std::string, jointPair> b
                                const std::vector<double>& length) :
                                Articulated(system, body_segment_map) {
   // Create a list of BodyPartsAccel that is later set as occpancy_
+  assert(thickness.size() == max_v.size());
+  assert(thickness.size() == length.size());
   std::vector<Extremity> body = {};
   int i=0;
   for (const auto& it : body_segment_map) {

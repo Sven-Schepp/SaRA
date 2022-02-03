@@ -19,6 +19,7 @@ along with Foobar.  If not, see https://www.gnu.org/licenses/.
 #include <string>
 #include <utility>
 #include <vector>
+#include <assert.h>
 
 #include "articulated.hpp"
 #include "extremity.hpp"
