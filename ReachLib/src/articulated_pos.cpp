@@ -71,8 +71,11 @@ std::vector<Extremity> ArticulatedPos::update(double t_a, double t_b,
 
 const bool ArticulatedPos::intersection(std::vector<Point> targets) {
   for (auto& it : this->occupancy_) {
-    it.intersection(targets);
+    if (it.intersection(targets)) {
+      return true;
+    }
   }
+  return false;
 }
 }  // namespace pos
 }  // namespace articulated

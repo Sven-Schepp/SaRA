@@ -69,8 +69,11 @@ std::vector<BodyPartAccel> ArticulatedAccel::update(double t_a, double t_b,
 
 bool ArticulatedAccel::intersection(std::vector<Point> targets) {
   for (auto& it : this->occupancy_) {
-    it.intersection(targets);
+    if (it.intersection(targets)) {
+      return true;
+    }
   }
+  return false;
 }
 }  // namespace accel
 }  // namespace articulated

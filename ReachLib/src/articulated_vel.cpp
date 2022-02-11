@@ -67,8 +67,11 @@ std::vector<BodyPartVel> ArticulatedVel::update(double t_a, double t_b,
 
 const bool ArticulatedVel::intersection(std::vector<Point> targets) {
   for (auto& it : this->occupancy_) {
-    it.intersection(targets);
+    if (it.intersection(targets)) {
+      return true;
+    }
   }
+  return false;
 }
 }  // namespace vel
 }  // namespace articulated
