@@ -23,6 +23,7 @@ We utilize live captured Cartesian positions of human joints calculated from mot
 - [Demo](#demo)
 - [ROS-Parameters](#ros-parameters)
 - [Software and Hardware](#software-and-hardware)
+- [Experimental results for calculation time](#experimental-results-for-calculation-time)
 - [License](#license)
 
 
@@ -322,6 +323,56 @@ All main nodes are written in C++ and adhere to the C++11 standard which is defi
 
 The Simulation was carried out on an **ASUS Zephyrus GX502** containing an **i7-9750H(2.6GHz-4.5GHz)** and an **NVidia RTX 2070(8Gib VRAM)**.
 This allows for smooth simulations at **30 frames per second** (Maximum supported by RViz).
+
+## Experimental results for calculation time
+We have measured the time required to calculate reachable sets and perform intersection checks with the robot's reachable sets for every frame of our experiments, based on each model individually and all models combined. This is repeated for all experiments as shown below. The following tables only contain data of the ``Articulated`` models since the calculation time of ``Pedestrian`` models is negligible in comparison. We abbreviate the models introduced in [How does SaRA Work](#how-does-sara-work) as follows: ``ArticulatedPos`` as (Pos), ``ArticulatedVel`` as (Vel), ``ArticulatedAcc`` as (Acc), and all models combined as (All). It should be mentioned however that, due to how short these calculation times are, measurements can vary by large percentages (+-20% -- 100%) based on background load on the CPU and RAM (results based on similar loads with standard deviation < 10). With the sampling time of standard robot controllers ranging from 400 to 5000 &mu;s, even the most radical outliers should not be time critical.<br><br>
+
+<div align="center">
+<table>
+<tr><th>Punch experiment </th><th>Box experiment</th></tr>
+<tr><td>
+
+| Model | avg. [&mu;s] | max [&mu;s] | min [&mu;s] |
+|:--|--|--|--|
+| Pos | 3.2 | 35 | 2 |
+| Vel | 9.2 | 41 | 6 |
+| Acc | 13.3 | 61 | 5 |
+| All | 20.7 | 83 | 17 |
+
+</td><td>
+
+| Model | avg. [&mu;s] | max [&mu;s] | min [&mu;s] |
+|:--|--|--|--|
+| Pos | 2.9 | 33 | 2 |
+| Vel | 8.4 | 37 | 3 |
+| Acc | 14.3 | 82 | 5 |
+| All | 21.8 | 91 | 15 |
+
+</td></tr> </table>
+</div>
+<div align="center">
+<table>
+<tr><th>Walking experiment </th><th>Headbutt experiment</th></tr>
+<tr><td>
+
+| Model | avg. [&mu;s] | max [&mu;s] | min [&mu;s] |
+|:--|--|--|--|
+| Pos | 3.0 | 37 | 2 |
+| Vel | 10.4 | 55 | 3 |
+| Acc | 12.6 | 52 | 8 |
+| All | 21.1 | 87 | 11 |
+
+</td><td>
+
+| Model | avg. [&mu;s] | max [&mu;s] | min [&mu;s] |
+|:--|--|--|--|
+| Pos | 3.2 | 29 | 2 |
+| Vel | 10.8 | 66 | 7 |
+| Acc | 15.5 | 67 | 11 |
+| All | 22.2 | 98 | 16 |
+
+</td></tr> </table>
+</div>
 
 ## Resources
 [1] M. Althoff, A. Giusti, S. B. Liu, and A. Pereira, “Effortless creationof  safe  robots  from  modules  through  self-programming  and  self-verification,”Science Robotics, vol. 4, no. 31, Jun 2019<br><br>
