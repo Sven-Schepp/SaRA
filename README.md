@@ -157,7 +157,7 @@ while (ros::ok()) {
     pub_vis.publish(v_a.markers_);
 }
 ```
-We provide a launch file that runs an instance of RViz as well as our main node *reachable_occupancy*, which can be supplied with simulation parameters for visualization, validation, and volume calculation as decribed in section [ROS-Parameters](ros-parameters). First, navigate to your catkin workspace and source the setup file as described in section [Demo](Demo). The following launch command can subsequently be used to run RViz and *reachable_occupancy*:
+We provide a launch file that runs an instance of RViz as well as our main node *reachable_occupancy*, which can be supplied with simulation parameters for visualization, validation, and volume calculation as decribed in section [ROS-Parameters](#ros-parameters). First, navigate to your catkin workspace and source the setup file as described in section [Demo](#Demo). The following launch command can subsequently be used to run RViz and *reachable_occupancy*:
 ```
 roslaunch reachable_occupancy reachable_occupancy.launch
 ```
@@ -175,7 +175,7 @@ roslaunch reachable_occupancy reachable_occupancy.launch
   - `reach_lib/include/`: The header files of ReachLib and reach_lib.hpp which provides type shortcuts and includes all ReachLib headers
   - `reach_lib/src/`: The sourcefiles implementing all classes and functions declared within the headers
 - `reachable_occupancy`: A ROS package that include ReachLib and provides visualization of occupancies
-  - `reachable_occupancy/config/`: Contains the yaml configuration file with presets for all adjsutable ROS-parameters described in section [ROS-Parameters](ros-parameters)
+  - `reachable_occupancy/config/`: Contains the yaml configuration file with presets for all adjsutable ROS-parameters described in section [ROS-Parameters](#ros-parameters)
   - `reachable_occupancy/include/`: Contains ReachLib and header files that declare functions for visualization, reception, and volume calculation
   - `reachable_occupancy/launch/`: The launchfiles used to run multiple nodes such as RViz in parallel to the visualization
   - `reachable_occupancy/msg/`: The definitions for all custom messages used in this ROS package (mainly time(t_a, t_b))
