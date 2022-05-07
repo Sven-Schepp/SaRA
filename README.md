@@ -382,4 +382,4 @@ We have measured the time required to calculate reachable sets and perform inter
 
 ## License
 SaRA is licensed under the terms of the GPL Open Source license and is freely available.<br>
-All projects expanding upon or integrating Reach-RI are subject to the terms of the GPL Open Source license.
+All projects expanding upon or integrating SaRA are subject to the terms of the GPL Open Source license.
