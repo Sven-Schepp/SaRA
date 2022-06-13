@@ -105,15 +105,17 @@ Capsule BodyPartAccel::ry(const Point& p, const Point& v,
     max_a = this->max_a2_;
   }
 
-  dy.x *= t_b;
-  dy.y *= t_b;
-  dy.z *= t_b;
+  double t_total = t_b + delay;
+
+  dy.x *= t_total;
+  dy.y *= t_total;
+  dy.z *= t_total;
 
   Point zero = Point();
   // Calculate the bound for the integral of y(t) = y(0) + dy(t)*t + 0.5*ddy(0)*t^2
   Capsule Bydy = Capsule::minkowski(Capsule(y, y, measurement_error_pos),
-                 Capsule(dy, dy, measurement_error_vel * (t_b + delay)));
-  return Capsule::minkowski(Bydy, Capsule(zero, zero, max_a / 2.0 * pow(t_b + delay, 2)));
+                 Capsule(dy, dy, measurement_error_vel * t_total));
+  return Capsule::minkowski(Bydy, Capsule(zero, zero, max_a / 2.0 * pow(t_total, 2)));
 }
 }  // namespace accel
 }  // namespace body_parts
