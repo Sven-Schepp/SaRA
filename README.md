@@ -7,8 +7,8 @@ We utilize live captured Cartesian positions of human joints calculated from mot
 
 Please cite the following resource if you have used SaRA in your projects:
 
-[S. R. Schepp, J. Thumm, S. B. Liu, and M. Althoff, “SaRA: A tool for safe human–robot coexistence and collaboration through reachability
-analysis,” in Proc. of the IEEE Int. Conf. on Robotics and Automation (ICRA), 2022](https://ieeexplore.ieee.org/abstract/document/9811952?casa_token=gJmaOlU9I2wAAAAA:yuFuMRIYNH6CAEebFmj9S4Ax7lVtax0gDI_d-m_gfYzgwkqWvkdh8xtx6mb9c0rZhopfyIM)
+[S. R. Schepp, J. Thumm, S. B. Liu, and M. Althoff, “SaRA: A Tool for Safe Human–Robot Coexistence and Collaboration through Reachability
+Analysis,” in Proc. of the IEEE Int. Conf. on Robotics and Automation (ICRA), 2022](https://ieeexplore.ieee.org/abstract/document/9811952?casa_token=gJmaOlU9I2wAAAAA:yuFuMRIYNH6CAEebFmj9S4Ax7lVtax0gDI_d-m_gfYzgwkqWvkdh8xtx6mb9c0rZhopfyIM)
 
 <p align="center">
   <img align="center" src="/images/f1.PNG" alt="drawing" height="350" width="350"/><img align="center" src="/images/f1o.PNG" alt="drawing" height="350" width="350"/>
