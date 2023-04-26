@@ -60,7 +60,7 @@ inline double clamp(double value, double lower = 0.0, double upper = 1.0) {
 //! \param[in] p A Point object
 //! \param[in] c A Capsule object defining a line segment
 inline double point_line_segment_dist(const Point& p, const Capsule& c) {
-  // https://de.mathworks.com/matlabcentral/answers/260593-distance-between-points-and-a-line-segment-in-3d
+  // https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
   // Vector from start to end of segment
   Point se = c.p2_ - c.p1_;
   // Length of segment
@@ -70,6 +70,7 @@ inline double point_line_segment_dist(const Point& p, const Capsule& c) {
   }
   double t = Point::inner_dot(p - c.p1_, se)/pow(dse, 2);
   t = clamp(t, 0.0, 1.0);
+  // Point p projected onto line segment
   Point projection = c.p1_ + se * t;
   return Point::norm(p, projection);
 }
