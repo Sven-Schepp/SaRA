@@ -21,6 +21,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include "occupancy_container.hpp"
 #include "point.hpp"
 #include "sphere.hpp"
+#include "aabb.hpp"
 
 #ifndef REACH_LIB_INCLUDE_INTERSECTIONS_HPP_
 #define REACH_LIB_INCLUDE_INTERSECTIONS_HPP_
@@ -39,6 +40,9 @@ typedef capsule::Capsule Capsule;
 
 //! \typedef Defines a shortcut to the Sphere class
 typedef sphere::Sphere Sphere;
+
+//! \typedef Defines a shortcut to the AABB class
+typedef aabb::AABB AABB;
 
 //! \brief Limits the value of a floating point variable by applying
 //! upper and lower bounds.
@@ -181,6 +185,22 @@ inline double sphere_sphere_intersection(const Sphere& s1, const Sphere& s2) {
   return sphere_sphere_dist(s1, s2) < 0.0;
 }
 
+//! \brief Determines whether a line segment intersects an AABB.
+//! \param[in] p1 First point defining the line segment.
+//! \param[in] p2 Second point defining the line segment.
+//! \param[in] aabb An object of type AABB.
+//! \param[out] t1 The value defining the first intersection point
+//!                on the line segment. pi1 = p1 + t1 * (p2 - p1)
+//! \param[out] t2 The value defining the second intersection point.
+//! \returns True if the line segment intersects the AABB or lies inside the AABB!
+bool line_segment_aabb_intersection(const Point& p1, const Point& p2, const AABB& aabb, double& t1, double& t2);
+
+//! \brief Determines whether a capsule intersects an AABB.
+//! \param[in] c An object of type Capsule.
+//! \param[in] aabb An object of type AABB.
+//! \returns True if the capsule intersects the AABB or lies inside the AABB!
+bool capsule_aabb_intersection(const Capsule& c, const AABB& aabb);
+  
 }  //  namespace intersections
 }  //  namespace occupancy_containers
 #endif  //  REACH_LIB_INCLUDE_INTERSECTIONS_HPP_

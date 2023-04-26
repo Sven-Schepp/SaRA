@@ -138,5 +138,146 @@ double min_segment_distance(const Capsule& c1, const Capsule& c2) {
     return Point::norm(pA - pB);
   }
 }
+
+bool line_segment_aabb_intersection(const Point& p1, const Point& p2, const AABB& aabb, double& t1, double& t2) {
+  // https://en.wikipedia.org/wiki/Liang%E2%80%93Barsky_algorithm
+  double delta_x = p2.x - p1.x;
+  double delta_y = p2.y - p1.y;
+  double delta_z = p2.z - p1.z;
+  std::vector<double> p = {-delta_x, delta_x, -delta_y, delta_y, -delta_z, delta_z};
+  std::vector<double> q = {
+    p1.x - aabb.min_[0],
+    aabb.max_[0] - p1.x,
+    p1.y - aabb.min_[1],
+    aabb.max_[1] - p1.y,
+    p1.z - aabb.min_[2],
+    aabb.max_[2] - p1.z
+  };
+  t1 = 0.0;
+  t2 = 1.0;
+  for (int i=0; i<6; i++) {
+    if (p[i] == 0) {
+      if (q[i] < 0) {
+        return false;
+      }
+    } else {
+      double t = q[i]/p[i];
+      if (p[i] < 0) {
+        t1 = std::max(t1, t);
+      } else {
+        t2 = std::min(t2, t);
+      }
+    }
+  }
+  return t1 <= t2;
+}
+
+bool capsule_aabb_intersection(const Capsule& c, const AABB& aabb) {
+  // Expand the AABB by the radius of the capsule
+  AABB expanded_aabb = aabb;
+  for (int i=0; i<3; i++) {
+    expanded_aabb.min_[i] -= c.r_;
+    expanded_aabb.max_[i] += c.r_;
+  }
+  // First check if the line segment intersects the expanded AABB
+  double t1, t2;
+  if (!line_segment_aabb_intersection(c.p1_, c.p2_, expanded_aabb, t1, t2)) {
+    return false;
+  }
+  // Check if the intersection occurs in one of the rounded corners.
+  if (t1 > 0 && t2 < 1) {
+    // Check where the intersection occurs
+    Point p1 = c.p1_ + (c.p2_ - c.p1_) * t1;
+    Point p2 = c.p1_ + (c.p2_ - c.p1_) * t2;
+    // Both points must lie outside the original AABB in the same direction
+    Point potential_corner;
+    // Dimension x
+    if (!(p1.x < aabb.min_[0] && p2.x < aabb.min_[0] ||
+        p1.x > aabb.max_[0] && p2.x > aabb.max_[0])) {
+      return true;
+    } else {
+      if (p1.x < aabb.min_[0]) {
+        potential_corner.x = aabb.min_[0];
+      } else {
+        potential_corner.x = aabb.max_[0];
+      }
+    }
+    // Dimension y
+    if (!(p1.y < aabb.min_[1] && p2.y < aabb.min_[1] ||
+        p1.y > aabb.max_[1] && p2.y > aabb.max_[1])) {
+      return true;
+    } else {
+      if (p1.y < aabb.min_[1]) {
+        potential_corner.y = aabb.min_[1];
+      } else {
+        potential_corner.y = aabb.max_[1];
+      }
+    }
+    // Dimension z
+    if (!(p1.z < aabb.min_[2] && p2.z < aabb.min_[2] ||
+        p1.z > aabb.max_[2] && p2.z > aabb.max_[2])) {
+      return true;
+    } else {
+      if (p1.z < aabb.min_[2]) {
+        potential_corner.z = aabb.min_[2];
+      } else {
+        potential_corner.z = aabb.max_[2];
+      }
+    }
+    // Both points lie in the same corner.
+    // Check if the corner of the original AABB is inside the capsule
+    double dist = point_line_segment_dist(potential_corner, c);
+    return dist < c.r_;
+  } else if (t1 > 0 && t2 >= 1 || t1 <= 0 && t2 < 1) {
+    Point p1;
+    if (t1 > 0 && t2 >= 1) {
+      p1 = c.p1_ + (c.p2_ - c.p1_) * t1;
+    } else {
+      p1 = c.p1_ + (c.p2_ - c.p1_) * t2;
+    }
+    // Check if the point is inside a corner
+    Point potential_corner;
+    // Dimension x
+    if (p1.x > aabb.min_[0] && p1.x < aabb.max_[0]) {
+      // Point does not lie in a corner
+      return true;
+    } else {
+      if (p1.x < aabb.min_[0]) {
+        potential_corner.x = aabb.min_[0];
+      } else {
+        potential_corner.x = aabb.max_[0];
+      }
+    }
+    // Dimension y
+    if (p1.y > aabb.min_[1] && p1.y < aabb.max_[1]) {
+      // Point does not lie in a corner
+      return true;
+    } else {
+      if (p1.y < aabb.min_[1]) {
+        potential_corner.y = aabb.min_[1];
+      } else {
+        potential_corner.y = aabb.max_[1];
+      }
+    }
+    // Dimension z
+    if (p1.z > aabb.min_[2] && p1.z < aabb.max_[2]) {
+      // Point does not lie in a corner
+      return true;
+    } else {
+      if (p1.z < aabb.min_[2]) {
+        potential_corner.z = aabb.min_[2];
+      } else {
+        potential_corner.z = aabb.max_[2];
+      }
+    }
+    // Point lies in a corner
+    // Check if the corner of the original AABB is inside the capsule
+    double dist = point_line_segment_dist(potential_corner, c);
+    return dist < c.r_;
+  } else {
+    // Line segment inside AABB
+    return true;
+  }
+}
 }  //  namespace intersections
 }  //  namespace occupancy_containers
