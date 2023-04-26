@@ -65,22 +65,13 @@ inline double point_line_segment_dist(const Point& p, const Capsule& c) {
   Point se = c.p2_ - c.p1_;
   // Length of segment
   double dse = Point::norm(se);
-  // Distance from start point to point
-  Point sp = p - c.p1_;
-  double dsp = Point::norm(sp);
-  // Distance from end point to point
-  Point ep = p - c.p2_;
-  double dep = Point::norm(ep);
-  // Type 1: Point closest to end point
-  if (sqrt(pow(dse, 2) + pow(dep, 2)) <= dsp) {
-    return dep;
+  if (dse == 0.0) {
+    return Point::norm(p - c.p1_);
   }
-  // Type 2: Point closest to start point
-  if (sqrt(pow(dse, 2) + pow(dsp, 2)) <= dep) {
-    return dsp;
-  }
-  // Type 3: Point in between start and end point
-  return (Point::norm(Point::cross(se, ep))/dse);
+  double t = Point::inner_dot(p - c.p1_, se)/pow(dse, 2);
+  t = clamp(t, 0.0, 1.0);
+  Point projection = c.p1_ + se * t;
+  return Point::norm(p, projection);
 }
 
 inline Point get_point_from_line_segment(const Capsule& c, double t) {
