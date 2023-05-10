@@ -99,7 +99,7 @@ Capsule BodyPartVel::ry(const Point& p, int index, double t_b,
   }
 
   // RP
-  return Capsule(p, p, measurement_error_pos + max_v * t_b + delay);
+  return Capsule(p, p, measurement_error_pos + max_v * (t_b + delay));
 }
 
 }  // namespace vel
