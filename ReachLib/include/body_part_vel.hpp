@@ -35,7 +35,7 @@ class BodyPartVel : public BodyPart {
   //! \brief Instatiates a BodyPart that updates based on
   //!        maximum estimated velocities.
   //! \param[in] name Name of the body part
-  //! \param[in] thickness Estimated thickness of the body part
+  //! \param[in] thickness Estimated thickness (diameter) of the body part
   //! \param[in] max_a Estimated maximum velocity of this body part
   BodyPartVel(std::string name, double thickness, double max_a1 = 0.0, double max_a2 = 0.0);
 

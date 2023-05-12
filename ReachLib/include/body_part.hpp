@@ -30,7 +30,7 @@ typedef occupancy_containers::capsule::Capsule Capsule;
 
 /*! This class defines the human as a construct
  *  of body parts which describe their own occupancy.
- *  A body part is defined by two joints and its thickness.
+ *  A body part is defined by two joints and its thickness (diameter).
  *  Body parts are used for the maximum velocity
  *  and acceleration based approaches
  *  and thus produce by two versions of occupancies:
@@ -45,7 +45,7 @@ class BodyPart : public Occupancy {
 
   //! \brief Instantiates a general body part
   //! \param[in] name Name of the body part
-  //! \param[in] thickness Estimated thickness of the body part
+  //! \param[in] thickness Estimated thickness (diameter) of the body part
   BodyPart(std::string name, double thickness);
 
   //! \brief Empty destructor
@@ -57,7 +57,7 @@ class BodyPart : public Occupancy {
   }
 
   //! \brief Returns the thickness of the body part
-  double get_thicknes() {
+  double get_thickness() {
       return this->thickness_;
   }
 

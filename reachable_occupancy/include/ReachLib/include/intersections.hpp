@@ -45,7 +45,7 @@ typedef sphere::Sphere Sphere;
 //! \param[in] value Unclamped value.
 //! \param[in] lower Lower value bound.
 //! \param[in] upper Upper value bound.
-double clamp(double value, double lower = 0.0, double upper = 1.0) {
+inline double clamp(double value, double lower = 0.0, double upper = 1.0) {
   if (value > upper) {
     return upper;
   } else if (value < lower) {
@@ -57,9 +57,9 @@ double clamp(double value, double lower = 0.0, double upper = 1.0) {
 
 //! \brief Calculates the shortest distance between a Cartesian point (x, y, z)
 //! and a finite line segents.
-//! \param[in] c1 A Capsule object defining a line segment
-//! \param[in] c2 A Capsule object defining a line segment
-double point_line_segment_dist(const Point& p, const Capsule& c) {
+//! \param[in] p A Point object
+//! \param[in] c A Capsule object defining a line segment
+inline double point_line_segment_dist(const Point& p, const Capsule& c) {
   // https://de.mathworks.com/matlabcentral/answers/260593-distance-between-points-and-a-line-segment-in-3d
   // Vector from start to end of segment
   Point se = c.p2_ - c.p1_;
@@ -83,7 +83,7 @@ double point_line_segment_dist(const Point& p, const Capsule& c) {
   return (Point::norm(Point::cross(se, ep))/dse);
 }
 
-Point get_point_from_line_segment(const Capsule& c, double t) {
+inline Point get_point_from_line_segment(const Capsule& c, double t) {
   return Point(c.p1_.x + (c.p2_.x - c.p1_.x)*t,
                c.p1_.y + (c.p2_.y - c.p1_.y)*t,
                c.p1_.z + (c.p2_.z - c.p1_.z)*t);
@@ -92,52 +92,11 @@ Point get_point_from_line_segment(const Capsule& c, double t) {
 //! \brief Calculates the shortest distance between two finite line segents.
 //! \param[in] c1 A Capsule object defining a line segment
 //! \param[in] c2 A Capsule object defining a line segment
-double segmentsDistance(const Capsule& c1, const Capsule& c2) {
-  Point d1 = c1.p2_ - c1.p1_;
-  Point d2 = c2.p2_ - c2.p1_;
-  Point r = c2.p1_ - c1.p1_;
-  double a = Point::inner_dot(d1, d1);
-  double e = Point::inner_dot(d2, d2);
-  double f = Point::inner_dot(d2, r);
-  double epsilon = 1e-6;
+double segmentsDistance(const Capsule& c1, const Capsule& c2);
 
-  double t = 0.0;
-  double s = 0.0;
-  // [p1,q1] is actually a point && [p2,q2] is actually a point
-  if (a <= epsilon && e <= epsilon) {
-    // distance = norm(p2-p1)
-    return Point::inner_dot(r, r);
-  } else {
-    double c = Point::inner_dot(d1, r);
-    if (a <= epsilon) {
-      s = 0;
-      t = clamp(f/e, 0.0, 1.0);
-    } else if (e < epsilon) {
-      t = 0;
-      s = clamp(-c/a, 0.0, 1.0);
-    } else {
-      double b = Point::inner_dot(d1, d2);
-      double denom = a*e - b*b;
-      if (denom != 0) {
-        s = clamp((b*f - c*e)/denom, 0.0, 1.0);
-      } else {
-        s = 0;
-      }
-      t = (b*s + f)/e;
-      if (t < 0) {
-        t = 0;
-        s = clamp(-c/a, 0.0, 1.0);
-      } else if (t > 1) {
-        t = 1;
-        s = clamp((b - c)/a, 0.0, 1.0);
-      }
-    }
-    Point closest_point_1 = get_point_from_line_segment(c1, static_cast<double>(s));
-    Point closest_point_2 = get_point_from_line_segment(c2, static_cast<double>(t));
-    return Point::norm(closest_point_1, closest_point_2);
-  }
-}
-
+//! \brief Calculates the shortest distance between two finite line segents.
+//! \param[in] c1 A Capsule object defining a line segment
+//! \param[in] c2 A Capsule object defining a line segment
 double min_segment_distance(const Capsule& c1, const Capsule& c2) {
   // Calculate denominator
   Point A = c1.p2_ - c1.p1_;
@@ -218,7 +177,7 @@ double min_segment_distance(const Capsule& c1, const Capsule& c2) {
 //! \brief Calculates whether the shortest distance between two capsules
 //! \param[in] c1 An object of type Capsule
 //! \param[in] c2 An object of type Capsule
-double capsule_capsule_dist(const Capsule& c1, const Capsule& c2) {
+inline double capsule_capsule_dist(const Capsule& c1, const Capsule& c2) {
   // First check if any capsule is a sphere
   bool is_sphere1 = c1.p1_ == c1.p2_;
   bool is_sphere2 = c2.p1_ == c2.p2_;
@@ -242,14 +201,14 @@ double capsule_capsule_dist(const Capsule& c1, const Capsule& c2) {
 //! \brief Determines whether there exists an intersection between two capsules
 //! \param[in] c1 An object of type Capsule
 //! \param[in] c2 An object of type Capsule
-bool capsule_capsule_intersection(const Capsule& c1, const Capsule& c2) {
+inline bool capsule_capsule_intersection(const Capsule& c1, const Capsule& c2) {
   return capsule_capsule_dist(c1, c2) < 0.0;
 }
 
 //! \brief Calculates the closest distance between two VERTICALLY extruded cylinders.
 //! \param[in] c1 An object of type Cylinder
 //! \param[in] c2 An object of type Cylinder
-double cylinder_cylinder_dist(const Cylinder& c1, const Cylinder& c2) {
+inline double cylinder_cylinder_dist(const Cylinder& c1, const Cylinder& c2) {
   return c1.r_ + c2.r_ - Point::norm(c1.p1_ - c2.p1_);
 }
 
@@ -257,7 +216,7 @@ double cylinder_cylinder_dist(const Cylinder& c1, const Cylinder& c2) {
 //! between two VERTICALLY extruded cylinders.
 //! \param[in] c1 An object of type Cylinder
 //! \param[in] c2 An object of type Cylinder
-bool cylinder_cylinder_intersection(const Cylinder& c1, const Cylinder& c2) {
+inline bool cylinder_cylinder_intersection(const Cylinder& c1, const Cylinder& c2) {
   return cylinder_cylinder_dist(c1, c2) < 0.0;
 }
 
@@ -265,7 +224,7 @@ bool cylinder_cylinder_intersection(const Cylinder& c1, const Cylinder& c2) {
 //! and an object of type capsule where cylinders are approximated as capsules
 //! \param[in] cy An object of type Cylinder
 //! \param[in] ca An object of type Capsule
-double cylinder_capsule_dist(const Cylinder& cy, const Capsule& ca) {
+inline double cylinder_capsule_dist(const Cylinder& cy, const Capsule& ca) {
   Capsule cyc = Capsule(cy.p1_, cy.p2_, cy.r_);
   return capsule_capsule_dist(cyc, ca);
 }
@@ -274,7 +233,7 @@ double cylinder_capsule_dist(const Cylinder& cy, const Capsule& ca) {
 //! and an object of type Capsule intersect.
 //! \param[in] cy An object of type Cylinder
 //! \param[in] ca An object of type Capsule
-bool cylinder_capsule_intersection(const Cylinder& cy, const Capsule& ca) {
+inline bool cylinder_capsule_intersection(const Cylinder& cy, const Capsule& ca) {
   return cylinder_capsule_dist(cy, ca) < 0.0;
 }
 
@@ -282,7 +241,7 @@ bool cylinder_capsule_intersection(const Cylinder& cy, const Capsule& ca) {
 //! and an object of type Capsule.
 //! \param[in] cy An object of type Cylinder
 //! \param[in] ca An object of type Capsule
-double sphere_capsule_dist(const Sphere& s, const Capsule& c) {
+inline double sphere_capsule_dist(const Sphere& s, const Capsule& c) {
   return capsule_capsule_dist(static_cast<Capsule>(s), c);
 }
 
@@ -290,21 +249,21 @@ double sphere_capsule_dist(const Sphere& s, const Capsule& c) {
 //! and an object of type Capsule intersect.
 //! \param[in] cy An object of type Cylinder.
 //! \param[in] ca An object of type Capsule.
-double sphere_capsule_intersection(const Sphere& s, const Capsule& c) {
+inline double sphere_capsule_intersection(const Sphere& s, const Capsule& c) {
   return capsule_capsule_intersection(static_cast<Capsule>(s), c);
 }
 
 //! \brief Calculates the closest distance between two objects of type Sphere.
 //! \param[in] s1 An object of type Sphere.
 //! \param[in] s2 An object of type Sphere.
-double sphere_sphere_dist(const Sphere& s1, const Sphere& s2) {
+inline double sphere_sphere_dist(const Sphere& s1, const Sphere& s2) {
   return s1.r_ + s2.r_ - Point::norm(s1.p_, s2.p_);
 }
 
 //! \brief Determines whether two objects of type Sphere intersect.
 //! \param[in] s1 An object of type Sphere.
 //! \param[in] s2 An object of type Sphere.
-double sphere_sphere_intersection(const Sphere& s1, const Sphere& s2) {
+inline double sphere_sphere_intersection(const Sphere& s1, const Sphere& s2) {
   return sphere_sphere_dist(s1, s2) < 0.0;
 }
 
