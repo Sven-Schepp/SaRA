@@ -31,7 +31,7 @@ typedef occupancy_containers::capsule::Capsule Capsule;
 
 /*! This class defines the human as a construct
  *  of extremities which describe their own occupancy.
- *  An extreity is defined by a joint, its thickness, and length.
+ *  An extreity is defined by a joint, its thickness (diameter), and length.
  *  extremities are used for the maximum position based approache.
  *  They describe a sphere of constant radius about their joint.
  */

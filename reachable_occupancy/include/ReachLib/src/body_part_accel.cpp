@@ -65,8 +65,8 @@ void BodyPartAccel::update(const std::vector<Point>& p,
   Capsule b1 = Capsule::ballEnclosure(rp1_t1, rp1_t2);
 
   if (b) {
-    // Add the thickness
-    rp1_t2.r_ += this->thickness_;
+    // Add the thickness (as radius)
+    rp1_t2.r_ += this->thickness_/2.0;
 
     this->occupancy_ = rp1_t2;  // was rp1_t1
   } else {
@@ -76,11 +76,11 @@ void BodyPartAccel::update(const std::vector<Point>& p,
                                      measurement_error_pos, measurement_error_vel);
     Capsule b2 = Capsule::ballEnclosure(rp2_t1, rp2_t2);
 
-    // Add the thickness to the ball with the larger radius (determines capsule radius)
+    // Add the thickness (as radius) to the ball with the larger radius (determines capsule radius)
     if (b1.r_ >= b2.r_) {
-        b1.r_ += this->thickness_;
+        b1.r_ += this->thickness_/2.0;
     } else {
-        b2.r_ += this->thickness_;
+        b2.r_ += this->thickness_/2.0;
     }
     this->occupancy_ = Capsule::capsuleEnclosure(b1, b2);
   }
@@ -105,15 +105,17 @@ Capsule BodyPartAccel::ry(const Point& p, const Point& v,
     max_a = this->max_a2_;
   }
 
-  dy.x *= t_b;
-  dy.y *= t_b;
-  dy.z *= t_b;
+  double t_total = t_b + delay;
+
+  dy.x *= t_total;
+  dy.y *= t_total;
+  dy.z *= t_total;
 
   Point zero = Point();
   // Calculate the bound for the integral of y(t) = y(0) + dy(t)*t + 0.5*ddy(0)*t^2
   Capsule Bydy = Capsule::minkowski(Capsule(y, y, measurement_error_pos),
-                 Capsule(dy, dy, measurement_error_vel * (t_b + delay)));
-  return Capsule::minkowski(Bydy, Capsule(zero, zero, max_a / 2.0 * pow(t_b + delay, 2)));
+                 Capsule(dy, dy, measurement_error_vel * t_total));
+  return Capsule::minkowski(Bydy, Capsule(zero, zero, max_a / 2.0 * pow(t_total, 2)));
 }
 }  // namespace accel
 }  // namespace body_parts

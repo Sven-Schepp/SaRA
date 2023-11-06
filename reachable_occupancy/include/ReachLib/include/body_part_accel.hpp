@@ -1,12 +1,12 @@
 /*
-This file is part of Reach-RI.
+This file is part of SaRA.
 
-Reach-RI is free software: you can redistribute it and/or modify
+SaRA is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 TUM, either version 3 of the License, or
 (at your option) any later version.
 
-Reach-RI is distributed in the hope that it will be useful,
+SaRA is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details: https://www.gnu.org/licenses/.
@@ -36,7 +36,7 @@ class BodyPartAccel : public BodyPart {
   //! \brief Instatiates a BodyPart that updates based on live velocities
   //!        and maximum estimated acceleration.
   //! \param[in] name Name of the body part
-  //! \param[in] thickness Estimated thickness of the body part
+  //! \param[in] thickness Estimated thickness (diameter) of the body part
   //! \param[in] max_a12 Estimated maximum acceleration of this body part
   BodyPartAccel(std::string name, double thickness, double max_a1 = 0.0, double max_a2 = 0.0);
 

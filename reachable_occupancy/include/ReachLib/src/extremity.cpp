@@ -50,8 +50,8 @@ void Extremity::update(const std::vector<Point>& p,
   double delta_t = t_b - t_a + delay;
   //  Distance covered at max_v over delta_t
   double dist = this->max_v_ * delta_t;
-  // Radius of the ball occupancy
-  double radius = dist + this->length_ + this->thickness_ + measurement_error_pos;
+  // Radius of the ball occupancy (thickness added as radius)
+  double radius = dist + this->length_ + this->thickness_/2.0 + measurement_error_pos;
   this->occupancy_ = Capsule(pe, pe, radius);
 }
 

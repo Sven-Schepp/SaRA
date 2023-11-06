@@ -47,7 +47,7 @@ class ArticulatedAccel : public Articulated {
   //! \brief Instantiates the maximum acceleration based model from joint pairs.
   //! \param[in] system System parameters such as: delay and measurement errors
   //! \param[in] body_segment_map_ An association between joints and body segments
-  //! \param[in] thickness Defines the thickness of each body part [body part name, thickness]
+  //! \param[in] thickness Defines the thickness (diameter) of each body part [body part name, thickness]
   //! \param[in] max_a Maximum acceleration of each joint
   ArticulatedAccel(System system, std::map<std::string, jointPair> body_segment_map,
                    const std::map<std::string, double>& thickness,
