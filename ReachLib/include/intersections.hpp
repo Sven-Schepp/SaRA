@@ -21,6 +21,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include "occupancy_container.hpp"
 #include "point.hpp"
 #include "sphere.hpp"
+#include "aabb.hpp"
 
 #ifndef REACH_LIB_INCLUDE_INTERSECTIONS_HPP_
 #define REACH_LIB_INCLUDE_INTERSECTIONS_HPP_
@@ -39,6 +40,9 @@ typedef capsule::Capsule Capsule;
 
 //! \typedef Defines a shortcut to the Sphere class
 typedef sphere::Sphere Sphere;
+
+//! \typedef Defines a shortcut to the AABB class
+typedef aabb::AABB AABB;
 
 //! \brief Limits the value of a floating point variable by applying
 //! upper and lower bounds.
@@ -60,27 +64,19 @@ inline double clamp(double value, double lower = 0.0, double upper = 1.0) {
 //! \param[in] p A Point object
 //! \param[in] c A Capsule object defining a line segment
 inline double point_line_segment_dist(const Point& p, const Capsule& c) {
-  // https://de.mathworks.com/matlabcentral/answers/260593-distance-between-points-and-a-line-segment-in-3d
+  // https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
   // Vector from start to end of segment
   Point se = c.p2_ - c.p1_;
   // Length of segment
   double dse = Point::norm(se);
-  // Distance from start point to point
-  Point sp = p - c.p1_;
-  double dsp = Point::norm(sp);
-  // Distance from end point to point
-  Point ep = p - c.p2_;
-  double dep = Point::norm(ep);
-  // Type 1: Point closest to end point
-  if (sqrt(pow(dse, 2) + pow(dep, 2)) <= dsp) {
-    return dep;
+  if (dse == 0.0) {
+    return Point::norm(p - c.p1_);
   }
-  // Type 2: Point closest to start point
-  if (sqrt(pow(dse, 2) + pow(dsp, 2)) <= dep) {
-    return dsp;
-  }
-  // Type 3: Point in between start and end point
-  return (Point::norm(Point::cross(se, ep))/dse);
+  double t = Point::inner_dot(p - c.p1_, se)/pow(dse, 2);
+  t = clamp(t, 0.0, 1.0);
+  // Point p projected onto line segment
+  Point projection = c.p1_ + se * t;
+  return Point::norm(p, projection);
 }
 
 inline Point get_point_from_line_segment(const Capsule& c, double t) {
@@ -192,6 +188,22 @@ inline double sphere_sphere_intersection(const Sphere& s1, const Sphere& s2) {
   return sphere_sphere_dist(s1, s2) < 0.0;
 }
 
+//! \brief Determines whether a line segment intersects an AABB.
+//! \param[in] p1 First point defining the line segment.
+//! \param[in] p2 Second point defining the line segment.
+//! \param[in] aabb An object of type AABB.
+//! \param[out] t1 The value defining the first intersection point
+//!                on the line segment. pi1 = p1 + t1 * (p2 - p1)
+//! \param[out] t2 The value defining the second intersection point.
+//! \returns True if the line segment intersects the AABB or lies inside the AABB!
+bool line_segment_aabb_intersection(const Point& p1, const Point& p2, const AABB& aabb, double& t1, double& t2);
+
+//! \brief Determines whether a capsule intersects an AABB.
+//! \param[in] c An object of type Capsule.
+//! \param[in] aabb An object of type AABB.
+//! \returns True if the capsule intersects the AABB or lies inside the AABB!
+bool capsule_aabb_intersection(const Capsule& c, const AABB& aabb);
+  
 }  //  namespace intersections
 }  //  namespace occupancy_containers
 #endif  //  REACH_LIB_INCLUDE_INTERSECTIONS_HPP_
