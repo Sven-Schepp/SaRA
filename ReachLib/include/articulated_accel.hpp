@@ -44,6 +44,12 @@ class ArticulatedAccel : public Articulated {
   //! \brief Empty constructor
   ArticulatedAccel() : Articulated() {}
 
+  //! \brief Empty constructor
+  //! \param[in] system System parameters such as: delay and measurement errors
+  //! \param[in] body_segment_map_ An association between joints and body segments
+  ArticulatedAccel(System system, std::map<std::string, jointPair> body_segment_map) : 
+    Articulated(system, body_segment_map) {}
+
   //! \brief Instantiates the maximum acceleration based model from joint pairs.
   //! \param[in] system System parameters such as: delay and measurement errors
   //! \param[in] body_segment_map_ An association between joints and body segments
