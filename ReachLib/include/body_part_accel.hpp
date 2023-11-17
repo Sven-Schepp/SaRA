@@ -37,7 +37,7 @@ class BodyPartAccel : public BodyPart {
   //!        and maximum estimated acceleration.
   //! \param[in] name Name of the body part
   //! \param[in] thickness Estimated thickness (diameter) of the body part
-  //! \param[in] max_a12 Estimated maximum acceleration of this body part
+  //! \param[in] max_a1, max_a2 Estimated maximum acceleration of this body part
   BodyPartAccel(std::string name, double thickness, double max_a1 = 0.0, double max_a2 = 0.0);
 
   //! \brief Empty destructor
