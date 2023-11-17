@@ -61,7 +61,7 @@ class BodyPartVel : public BodyPart {
   //!        the current occupancy.
   const bool intersection(std::vector<Point> targets);
 
- private:
+ protected:
   //! \brief Maximum estimated velocity of the proximal joint (constant)
   double max_v1_ = 0.0;
 

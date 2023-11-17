@@ -63,7 +63,7 @@ class BodyPartAccel : public BodyPart {
   //!        the current occupancy.
   bool intersection(std::vector<Point> targets);
 
- private:
+ protected:
   //! \brief Maximum estimated acceleration of the proximal joint (constant)
   double max_a1_ = 0.0;
 
