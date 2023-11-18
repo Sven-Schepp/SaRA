@@ -26,10 +26,12 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 //! All headers contained in reach_lib
 #include "articulated.hpp"
 #include "articulated_accel.hpp"
+#include "articulated_combined.hpp"
 #include "articulated_pos.hpp"
 #include "articulated_vel.hpp"
 #include "body_part.hpp"
 #include "body_part_accel.hpp"
+#include "body_part_combined.hpp"
 #include "body_part_vel.hpp"
 #include "capsule.hpp"
 #include "cylinder.hpp"
@@ -61,6 +63,7 @@ typedef occupancy_containers::capsule::Capsule Capsule;
 typedef occupancy_containers::cylinder::Cylinder Cylinder;
 
 //! Occupancy models
+typedef occupancies::body_parts::accel::BodyPartCombined BodyPartCombined;
 typedef occupancies::body_parts::accel::BodyPartAccel BodyPartAccel;
 typedef occupancies::body_parts::vel::BodyPartVel BodyPartVel;
 typedef occupancies::extremities::Extremity Extremity;
@@ -68,6 +71,7 @@ typedef occupancies::cylinder_perimeters::CylinderPerimeter CylinderPerimeter;
 
 //! Articulated models
 typedef obstacles::articulated::Articulated Articulated;
+typedef obstacles::articulated::accel::ArticulatedCombined ArticulatedCombined;
 typedef obstacles::articulated::accel::ArticulatedAccel ArticulatedAccel;
 typedef obstacles::articulated::pos::ArticulatedPos ArticulatedPos;
 typedef obstacles::articulated::vel::ArticulatedVel ArticulatedVel;
@@ -80,6 +84,14 @@ typedef obstacles::pedestrian::vel::PedestrianVel PedestrianVel;
 
 
 //! Extracting Capsules and Cylinders from occupancy models
+inline std::vector<Capsule> get_capsules (ArticulatedCombined a_comb) {
+  std::vector<Capsule> capsules;
+  for (auto it : a_comb.get_occupancy()) {
+    capsules.push_back(it.get_occupancy());
+  }
+  return capsules;
+}
+
 inline std::vector<Capsule> get_capsules (ArticulatedAccel a_accel) {
   std::vector<Capsule> capsules;
   for (auto it : a_accel.get_occupancy()) {

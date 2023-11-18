@@ -15,6 +15,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include <cassert>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "body_part.hpp"
 #include "body_part_combined.hpp"
@@ -42,6 +43,11 @@ Capsule BodyPartCombined::ry(const Point& p, const Point& v,
   y = p;
   Point dy = v;
   double v_0 = Point::norm(dy);
+  if (v_0 < 1e-12) {
+    dy = Point(1.0, 0.0, 0.0);
+  } else {
+    dy = dy * (1.0/v_0);
+  }
 
   double a_max = 0.0, v_max = 0.0;
   if (index == 1) {
@@ -61,7 +67,7 @@ Capsule BodyPartCombined::ry(const Point& p, const Point& v,
   // Time to reach negative maximum velocity from v_0
   double t_down = std::max(std::min((v_max + v_0)/a_max, t), 0.0);
   double radius_big_circle = 0.0;
-  if (t_down < t || (t_down >=t && t_up >= t)) {
+  if (t_down < t || (t_down >= t && t_up >= t)) {
     // Movement is symetrical
     radius_big_circle = a_max * (t * t_max - 0.5 * std::pow(t_max, 2.0));
   } else {
@@ -71,10 +77,62 @@ Capsule BodyPartCombined::ry(const Point& p, const Point& v,
         std::pow(t * t_max - 0.5 * std::pow(t_max, 2.0), 2.0));
   }
   // Caculate the new center of the ball.
-  double center_shift = t + 0.5 * a_max/v_0 * (t*(t_up-t_down) - 0.5 * (std::pow(t_up, 2.0) - std::pow(t_down, 2.0)));
+  double center_shift = t * v_0 + 0.5 * a_max * (t*(t_up-t_down) - 0.5 * (std::pow(t_up, 2.0) - std::pow(t_down, 2.0)));
   Point center = y + dy * center_shift;
   return Capsule(center, center, radius_big_circle + measurement_error_pos + measurement_error_vel * t);
 }
-}  // namespace accel
+
+void BodyPartCombined::update(const std::vector<Point>& p,
+                           const std::vector<Point>& v,
+                           double t_a, double t_b,
+                           double measurement_error_pos,
+                           double measurement_error_vel,
+                           double delay) {
+  // The vectors must contain exactly 2 points
+  assert(("Vector p must have exactly two entries for BodyPartCombined", size(p) == 2));
+  assert(("Vector v must have exactly two entries for BodyPartCombined", size(v) == 2));
+  // translate vector entries to proximal and distal joint values
+  Point p1 = p[0];
+  Point p2 = p[1];
+  Point v1 = v[0];
+  Point v2 = v[1];
+
+  // Check whether this capsule is a ball
+  bool b;
+  if (p1 == p2) {
+      b = true;
+  } else {
+      b = false;
+  }
+
+  // Calculate the occupancies of the proximal and distal joint up to t_a
+  Capsule rp1_t1 = BodyPartCombined::ry(p1, v1, 1, t_a, delay,
+                                     measurement_error_pos, measurement_error_vel);
+  Capsule rp1_t2 = BodyPartCombined::ry(p1, v1, 1, t_b, delay,
+                                     measurement_error_pos, measurement_error_vel);  // was p2
+  Capsule b1 = Capsule::ballEnclosure(rp1_t1, rp1_t2);
+
+  if (b) {
+    // Add the thickness (as radius)
+    rp1_t2.r_ += this->thickness_/2.0;
+
+    this->occupancy_ = rp1_t2;  // was rp1_t1
+  } else {
+    Capsule rp2_t1 = BodyPartCombined::ry(p2, v2, 2, t_a, delay,
+                                     measurement_error_pos, measurement_error_vel);  // was p1
+    Capsule rp2_t2 = BodyPartCombined::ry(p2, v2, 2, t_b, delay,
+                                     measurement_error_pos, measurement_error_vel);
+    Capsule b2 = Capsule::ballEnclosure(rp2_t1, rp2_t2);
+
+    // Add the thickness (as radius) to the ball with the larger radius (determines capsule radius)
+    if (b1.r_ >= b2.r_) {
+        b1.r_ += this->thickness_/2.0;
+    } else {
+        b2.r_ += this->thickness_/2.0;
+    }
+    this->occupancy_ = Capsule::capsuleEnclosure(b1, b2);
+  }
+}
+}  // namespace Combined
 }  // namespace body_parts
 }  // namespace occupancies

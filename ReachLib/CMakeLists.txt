@@ -41,6 +41,17 @@ install(EXPORT ${PROJECT_NAME}Config DESTINATION share/${PROJECT_NAME}/cmake)
 
 export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
 
+#############
+## GTest ##
+#############
+enable_testing()
+find_package(GTest REQUIRED)
+include(GoogleTest)
+
+add_executable(body_part_combined_tests tests/src/body_part_combined_tests.cc)
+target_include_directories(body_part_combined_tests PUBLIC tests/include)
+target_link_libraries(body_part_combined_tests ${PROJECT_NAME} GTest::GTest GTest::Main)
+gtest_discover_tests(body_part_combined_tests)
 
 #set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER include/reach_lib.hpp)
 

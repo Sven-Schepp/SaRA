@@ -46,6 +46,22 @@ class BodyPartCombined : public BodyPartAccel {
   //! \brief Empty destructor
   ~BodyPartCombined() {}
 
+  //! \brief Calcualtes the current occupancy using the Articuated model.
+  //! Overrides the identical blueprint method from Occupancy.
+  //! \param[in] p Current joint position in Cartesian coordinartes (x, y ,z) size(p) = 2.
+  //! \param[in] v Current joint velocity size(v) = 2.
+  //! \param[in] t_a Start of the interval of analysis.
+  //! \param[in] t_b End of the interval of analysis.
+  //! \param[in] measurement_error_pos Measurement errors in cartesian position [m].
+  //! \param[in] measurement_error_vel Measurement errors in cartesian velocity [m/s].
+  //! \param[in] delay Time delay within the executing system.
+  void update(const std::vector<Point>& p,
+              const std::vector<Point>& v = {},
+              double t_a = 0.0, double t_b = 0.0,
+              double measurement_error_pos = 0.0,
+              double measurement_error_vel = 0.0,
+              double delay = 0.0);
+
  protected:
   //! \brief Maximum estimated velocity of the proximal joint (constant)
   double max_v1_ = 0.0;
