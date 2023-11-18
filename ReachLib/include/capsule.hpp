@@ -90,7 +90,6 @@ class Capsule : public OccupancyContainer {
   //! \param[in] c2 Second capsule; must be a ball.
   static Capsule ballEnclosure(const Capsule& c1, const Capsule& c2);
 
- private:
   //! \brief Returns a pair of the alpha/beta values defiend in:
   //! https://doi-org.eaccess.ub.tum.de/10.1109/IROS.2017.8206314
   //! \param[in] ri Radius of the ball with the greater radius
