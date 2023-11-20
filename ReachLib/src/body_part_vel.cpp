@@ -35,7 +35,7 @@ BodyPartVel::BodyPartVel(std::string name, double thickness,
   //  NO TODO
 }
 
-const bool BodyPartVel::intersection(std::vector<Point> targets) {
+bool BodyPartVel::intersection(std::vector<Point> targets) const {
   return this->occupancy_.intersection(targets);
 }
 
@@ -90,7 +90,7 @@ void BodyPartVel::update(const std::vector<Point>& p,
 }
 
 Capsule BodyPartVel::ry(const Point& p, int index, double t_b,
-           double delay, double measurement_error_pos) {
+           double delay, double measurement_error_pos) const {
   double max_v;
   if (index == 1) {
     max_v = this->max_v1_;

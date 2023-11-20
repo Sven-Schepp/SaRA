@@ -72,7 +72,7 @@ class Capsule : public OccupancyContainer {
   //! \brief Determines whether the capsule intersects with
   //!        any point in points.
   //! \param[in] targets List of points of interest in Cartesian (x, y, z).
-  bool intersection(const std::vector<Point>& targets);
+  bool intersection(const std::vector<Point>& targets) const;
 
   //! \brief Calculates the minkowski sum of two capsules.
   //!        It adds both points and radii of the two capsules.

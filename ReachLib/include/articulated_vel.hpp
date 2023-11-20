@@ -69,16 +69,16 @@ class ArticulatedVel : public Articulated {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'VEL'
-  std::string get_mode() {
+  std::string get_mode() const {
       return "ARICULATED-VEL";
   }
 
   //! \brief Returns the current occupancy as a list of body parts
-  std::vector<BodyPartVel> get_occupancy() {
+  std::vector<BodyPartVel> get_occupancy() const {
     return this->occupancy_;
   }
 

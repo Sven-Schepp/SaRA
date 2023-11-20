@@ -58,17 +58,17 @@ class PedestrianVel : public Pedestrian {
   //!        the current occupancy.
   //! \param[in] targets A list of points of interest to be checked against
   //!                    the current occupancy.
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'PEDESTRIAN-VEL'
-  std::string get_mode() {
+  std::string get_mode() const {
       return "PEDESTRIAN-VEL";
   }
 
   //! \brief Returns the maximum velocity parameter
-  double get_max_v() {
-    return this->max_v_;
+  double get_max_v() const {
+    return max_v_;
   }
 
   //! \brief Emtpy destructor

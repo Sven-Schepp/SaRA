@@ -52,13 +52,13 @@ class BodyPart : public Occupancy {
   ~BodyPart() {}
 
   //! \brief Returns the current occupancy
-  inline Capsule get_occupancy() {
-    return this->occupancy_;
+  inline Capsule get_occupancy() const {
+    return occupancy_;
   }
 
   //! \brief Returns the thickness of the body part
-  double get_thickness() {
-      return this->thickness_;
+  double get_thickness() const {
+      return thickness_;
   }
 
  protected:

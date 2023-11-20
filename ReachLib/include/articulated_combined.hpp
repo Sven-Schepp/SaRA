@@ -60,13 +60,13 @@ class ArticulatedCombined : public ArticulatedAccel {
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'ACCEL'
-  std::string get_mode() {
+  std::string get_mode() const {
       return "ARICULATED-COMBINED";
   }
 
   //! \brief Returns the current occupancy as a list of body parts
-  std::vector<BodyPartCombined> get_occupancy() {
-    return this->occupancy_;
+  std::vector<BodyPartCombined> get_occupancy() const {
+    return occupancy_;
   }
 
  private:

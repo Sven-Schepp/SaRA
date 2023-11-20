@@ -82,7 +82,7 @@ class BodyPartCombined : public BodyPartAccel {
   Capsule ry(const Point& p, const Point& v,
              int index, double t_b = 0.02, double delay = 0.0,
              double measurement_error_pos = 0.0,
-             double measurement_error_vel = 0.0);
+             double measurement_error_vel = 0.0) const;
 };
 }  // namespace accel
 }  // namespace body_parts

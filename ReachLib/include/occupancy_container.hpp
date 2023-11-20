@@ -40,7 +40,7 @@ class OccupancyContainer {
   //!        Throws an exception if the type of OccupancyContainer
   //!        can not be determined.
   //! \param[in] targets List of points of interes in Cartesian (x y z)
-  bool intersection(const std::vector<Point>& targets) {
+  bool intersection(const std::vector<Point>& targets) const {
     throw "Function occupancy_containers::OccupancyContainer intersection is not defined!";
   }
 };

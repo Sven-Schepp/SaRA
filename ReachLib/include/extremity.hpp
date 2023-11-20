@@ -67,21 +67,21 @@ class Extremity : public Occupancy {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
   //! \brief Returns the current occupancy
-  inline Capsule get_occupancy() {
-    return this->occupancy_;
+  inline Capsule get_occupancy() const {
+    return occupancy_;
   }
 
   //! \brief Returns the thickness of the extremity
-  double get_thickness() {
-      return this->thickness_;
+  double get_thickness() const {
+      return thickness_;
   }
 
   //! \brief Returns the length of the extremity
-  double get_length() {
-      return this->length_;
+  double get_length() const {
+      return length_;
   }
 
  private:

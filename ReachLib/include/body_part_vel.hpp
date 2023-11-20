@@ -59,7 +59,7 @@ class BodyPartVel : public BodyPart {
 
   //! \brief Determines if any point from the list 'targets' is located inside
   //!        the current occupancy.
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
  protected:
   //! \brief Maximum estimated velocity of the proximal joint (constant)
@@ -77,7 +77,7 @@ class BodyPartVel : public BodyPart {
   //! \param[in] delay Time delay within the executing system
   //! \param[in] measurement_error_pos Measurement errors in cartesian position [m]
   Capsule ry(const Point& p, int index, double t_end = 0.02,
-             double delay = 0.0, double measurement_error_pos = 0.0);
+             double delay = 0.0, double measurement_error_pos = 0.0) const;
 };
 }  // namespace vel
 }  // namespace body_parts

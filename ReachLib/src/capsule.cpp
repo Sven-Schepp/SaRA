@@ -125,7 +125,7 @@ std::tuple<double, double> Capsule::alphaBeta(double ri, double rj, Point x) {
     return std::make_tuple(std::max(ri - rj, n), std::min(ri - rj, n));
 }
 
-bool Capsule::intersection(const std::vector<Point>& targets) {
+bool Capsule::intersection(const std::vector<Point>& targets) const {
   bool intersect = false;
   for (auto& it : targets) {
     intersect = point_capsule_intersection(*this, targets);

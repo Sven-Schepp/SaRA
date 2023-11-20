@@ -55,7 +55,7 @@ void Extremity::update(const std::vector<Point>& p,
   this->occupancy_ = Capsule(pe, pe, radius);
 }
 
-const bool Extremity::intersection(std::vector<Point> targets) {
+bool Extremity::intersection(std::vector<Point> targets) const {
   return this->occupancy_.intersection(targets);
 }
 

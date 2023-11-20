@@ -61,7 +61,7 @@ class BodyPartAccel : public BodyPart {
 
   //! \brief Determines if any point from the list 'targets' is located inside
   //!        the current occupancy.
-  bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
  protected:
   //! \brief Maximum estimated acceleration of the proximal joint (constant)
@@ -83,7 +83,7 @@ class BodyPartAccel : public BodyPart {
   Capsule ry(const Point& p, const Point& v,
              int index, double t_b = 0.02, double delay = 0.0,
              double measurement_error_pos = 0.0,
-             double measurement_error_vel = 0.0);
+             double measurement_error_vel = 0.0) const;
 };
 }  // namespace accel
 }  // namespace body_parts

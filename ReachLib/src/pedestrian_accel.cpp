@@ -119,7 +119,7 @@ std::vector<CylinderPerimeter> PedestrianAccel::update(double t_a, double t_b,
   return this->occupancy_;
 }
 
-const bool PedestrianAccel::intersection(std::vector<Point> targets) {
+bool PedestrianAccel::intersection(std::vector<Point> targets) const {
   bool intersection = false;
   for (const auto& it : targets) {
     intersection = this->occupancy_[0].intersection(targets);

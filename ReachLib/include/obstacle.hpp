@@ -49,17 +49,17 @@ class Obstacle {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<Point> targets) {
+  bool intersection(std::vector<Point> targets) const {
     throw "Function safety_perimeters::Obstacle::intersection is not defined!";
   }
 
   //! \brief Returns Pointers to the current occupancies of the respective model
-  inline std::vector<occupancies::Occupancy*> get_occupancy_p() {
+  inline std::vector<occupancies::Occupancy*> get_occupancy_p() const {
     return this->occupancy_p;
   }
 
   //! \brief Returns the system parameters that the model was initialized with
-  inline System get_system() {
+  inline System get_system() const {
     return this->system;
   }
 

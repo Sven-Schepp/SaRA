@@ -38,7 +38,7 @@ BodyPartCombined::BodyPartCombined(std::string name, double thickness, double ma
 Capsule BodyPartCombined::ry(const Point& p, const Point& v,
                           int index, double t_b, double delay,
                           double measurement_error_pos,
-                          double measurement_error_vel) {
+                          double measurement_error_vel) const {
   Point y;
   y = p;
   Point dy = v;

@@ -64,7 +64,7 @@ std::vector<BodyPartAccel> ArticulatedAccel::update(double t_a, double t_b,
   return this->occupancy_;
 }
 
-bool ArticulatedAccel::intersection(std::vector<Point> targets) {
+bool ArticulatedAccel::intersection(std::vector<Point> targets) const {
   for (auto& it : this->occupancy_) {
     if (it.intersection(targets)) {
       return true;

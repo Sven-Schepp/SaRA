@@ -43,7 +43,7 @@ class Sphere : public OccupancyContainer {
   //! \brief Determines whether there exists an intersection between
   //!        this Sphere and any point within targets.
   //! \param[in] targets List of points of interes in Cartesian (x y z)
-  bool intersection(const std::vector<Point>& targets);
+  bool intersection(const std::vector<Point>& targets) const;
 };
 }  // namespace sphere
 }  // namespace occupancy_containers
