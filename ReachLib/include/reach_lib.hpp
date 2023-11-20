@@ -137,22 +137,26 @@ inline std::vector<Cylinder> get_cylinders(const PedestrianVel& p_vel) {
 
 // Map the models to the type string
 // E.g. "ARICULATED-POS" -> reach_lib::ArticulatedPos
-std::vector<Capsule> get_capsules_pos_wrapper(const Articulated& a)
+inline std::vector<Capsule> get_capsules_pos_wrapper(const Articulated& a)
 {
   return get_capsules(static_cast<const ArticulatedPos&>(a));
 }
-std::vector<Capsule> get_capsules_vel_wrapper(const Articulated& a)
+
+inline std::vector<Capsule> get_capsules_vel_wrapper(const Articulated& a)
 {
   return get_capsules(static_cast<const ArticulatedVel&>(a));
 }
-std::vector<Capsule> get_capsules_accel_wrapper(const Articulated& a)
+
+inline std::vector<Capsule> get_capsules_accel_wrapper(const Articulated& a)
 {
   return get_capsules(static_cast<const ArticulatedAccel&>(a));
 }
-std::vector<Capsule> get_capsules_combined_wrapper(const Articulated& a)
+
+inline std::vector<Capsule> get_capsules_combined_wrapper(const Articulated& a)
 {
   return get_capsules(static_cast<const ArticulatedCombined&>(a));
 }
+
 const std::map<std::string, std::function<std::vector<Capsule>(const Articulated&)>> get_capsule_map = {
   {"ARICULATED-POS", get_capsules_pos_wrapper},
   {"ARICULATED-VEL", get_capsules_vel_wrapper},
