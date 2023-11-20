@@ -48,6 +48,10 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include "sphere.hpp"
 #include "system.hpp"
 
+#include <map>
+#include <string>
+#include <functional>
+
 #ifndef REACH_LIB_INCLUDE_REACH_LIB_HPP_
 #define REACH_LIB_INCLUDE_REACH_LIB_HPP_
 
@@ -82,17 +86,16 @@ typedef obstacles::pedestrian::accel::PedestrianAccel PedestrianAccel;
 typedef obstacles::pedestrian::vel::PedestrianVel PedestrianVel;
 
 
-
-//! Extracting Capsules and Cylinders from occupancy models
-inline std::vector<Capsule> get_capsules (ArticulatedCombined a_comb) {
+inline std::vector<Capsule> get_capsules(const ArticulatedCombined& a_comb) {
   std::vector<Capsule> capsules;
-  for (auto it : a_comb.get_occupancy()) {
+  std::vector<BodyPartCombined> occupancy = a_comb.get_occupancy();
+  for (const auto& it : occupancy) {
     capsules.push_back(it.get_occupancy());
   }
   return capsules;
 }
 
-inline std::vector<Capsule> get_capsules (ArticulatedAccel a_accel) {
+inline std::vector<Capsule> get_capsules(const ArticulatedAccel& a_accel) {
   std::vector<Capsule> capsules;
   for (auto it : a_accel.get_occupancy()) {
     capsules.push_back(it.get_occupancy());
@@ -100,7 +103,7 @@ inline std::vector<Capsule> get_capsules (ArticulatedAccel a_accel) {
   return capsules;
 }
 
-inline std::vector<Capsule> get_capsules (ArticulatedVel a_vel) {
+inline std::vector<Capsule> get_capsules(const ArticulatedVel& a_vel) {
   std::vector<Capsule> capsules;
   for (auto& it : a_vel.get_occupancy()) {
     capsules.push_back(it.get_occupancy());
@@ -108,7 +111,7 @@ inline std::vector<Capsule> get_capsules (ArticulatedVel a_vel) {
   return capsules;
 }
 
-inline std::vector<Capsule> get_capsules (ArticulatedPos& a_pos) {
+inline std::vector<Capsule> get_capsules(const ArticulatedPos& a_pos) {
   std::vector<Capsule> capsules;
   for (auto& it : a_pos.get_occupancy()) {
     capsules.push_back(it.get_occupancy());
@@ -116,7 +119,7 @@ inline std::vector<Capsule> get_capsules (ArticulatedPos& a_pos) {
   return capsules;
 }
 
-inline std::vector<Cylinder> get_cylinders (PedestrianAccel& p_accel) {
+inline std::vector<Cylinder> get_cylinders(const PedestrianAccel& p_accel) {
   std::vector<Cylinder> cylinders;
   for (auto& it : p_accel.get_occupancy()) {
     cylinders.push_back(it.get_occupancy());
@@ -124,13 +127,39 @@ inline std::vector<Cylinder> get_cylinders (PedestrianAccel& p_accel) {
   return cylinders;
 }
 
-inline std::vector<Cylinder> get_cylinders (PedestrianVel& p_vel) {
+inline std::vector<Cylinder> get_cylinders(const PedestrianVel& p_vel) {
   std::vector<Cylinder> cylinders;
   for (auto& it : p_vel.get_occupancy()) {
     cylinders.push_back(it.get_occupancy());
   }
   return cylinders;
 }
+
+// Map the models to the type string
+// E.g. "ARICULATED-POS" -> reach_lib::ArticulatedPos
+std::vector<Capsule> get_capsules_pos_wrapper(const Articulated& a)
+{
+  return get_capsules(static_cast<const ArticulatedPos&>(a));
+}
+std::vector<Capsule> get_capsules_vel_wrapper(const Articulated& a)
+{
+  return get_capsules(static_cast<const ArticulatedVel&>(a));
+}
+std::vector<Capsule> get_capsules_accel_wrapper(const Articulated& a)
+{
+  return get_capsules(static_cast<const ArticulatedAccel&>(a));
+}
+std::vector<Capsule> get_capsules_combined_wrapper(const Articulated& a)
+{
+  return get_capsules(static_cast<const ArticulatedCombined&>(a));
+}
+const std::map<std::string, std::function<std::vector<Capsule>(const Articulated&)>> get_capsule_map = {
+  {"ARICULATED-POS", get_capsules_pos_wrapper},
+  {"ARICULATED-VEL", get_capsules_vel_wrapper},
+  {"ARICULATED-ACCEL", get_capsules_accel_wrapper},
+  {"ARICULATED-COMBINED", get_capsules_combined_wrapper}
+};
+
 
 //! Intersection functions
 namespace intersections = occupancy_containers::intersections;
