@@ -30,6 +30,11 @@ std::vector<Point> simulate_point_movement(
   for (double phi = -M_PI; phi <= M_PI; phi += 2.0*M_PI/precision_1) {
     Point point = c_vel + Point(std::cos(phi), std::sin(phi), 0) * r_vel;
     for (double theta = -M_PI; theta <= M_PI; theta += 2*M_PI/precision_2) {
+      if (v_0 > v_max) {
+        Point new_point = point + dy_0 * (v_0 * t);
+        points.push_back(new_point);
+        continue;
+      }
       Point a = Point(std::cos(theta), std::sin(theta), 0) * a_max;
       double denom = std::pow(Point::norm(a), 2.0);
       double p = 2.0 * v_0 * Point::inner_dot(dy_0, a) / denom;

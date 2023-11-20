@@ -60,6 +60,13 @@ Capsule BodyPartCombined::ry(const Point& p, const Point& v,
 
   // Entire time of the movement
   double t = t_b + delay;
+
+  if (v_0 > v_max) {
+    // Point is already moving faster than v_max
+    // We assume that the point does not accelerate further.
+    // We use the constant velocity model with v_0 instead of v_max.
+    return Capsule(p, p, measurement_error_pos + v_0 * t);
+  }
   // Time to reach maximum velocity from v_0
   double t_up = std::max(std::min((v_max - v_0)/a_max, t), 0.0);
   // Time to reach maximum velocity from 0
