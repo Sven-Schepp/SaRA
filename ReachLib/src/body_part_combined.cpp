@@ -80,7 +80,7 @@ Capsule BodyPartCombined::ry(const Point& p, const Point& v,
   } else {
     // Movement is not symetrical
     radius_big_circle = a_max * std::sqrt(
-        1.0/4.0 * (t * (t_up+t_down) - 0.5 * std::pow(std::pow(t_up, 2.0) + std::pow(t_down, 2.0), 2.0)) +
+        1.0/4.0 * std::pow(t * (t_up+t_down) - 0.5 * (std::pow(t_up, 2.0) + std::pow(t_down, 2.0)), 2.0) +
         std::pow(t * t_max - 0.5 * std::pow(t_max, 2.0), 2.0));
   }
   // Caculate the new center of the ball.

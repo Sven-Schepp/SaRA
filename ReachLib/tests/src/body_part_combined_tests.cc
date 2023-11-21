@@ -94,6 +94,38 @@ TEST_F(BodyPartCombinedTest, ZeroInitialVelTest) {
     + measurement_error_pos_ + time * measurement_error_vel_ + thickness_/2);
 }
 
+TEST_F(BodyPartCombinedTest, OneInitialVelTest) {
+  Point dy_0(0.0, 1.0, 0.0);
+  Point dy_1(0.0, 1.0, 0.0);
+  Point y_0(0.0, 0.01, 0.0);
+  Point y_1(0.5, 0.01, 0.0);
+  double prediction_time = 0.04;
+  double delay = 0.01;
+  double t = prediction_time + delay;
+  body_.update({y_0, y_1}, {dy_0, dy_1}, 0.0, prediction_time, measurement_error_pos_, measurement_error_vel_, delay);
+  Capsule cap = body_.get_occupancy();
+  double a_max = 50;
+  double thickness = 0.1;
+  double radius = thickness / 2.0;
+  double v_0 = 1.0;
+  double v_max = 2.0;
+  double t_up = std::max(std::min((v_max - v_0) / a_max, t), 0.0);
+  double t_down = std::max(std::min((v_max + v_0) / a_max, t), 0.0);
+  double t_bar = std::max(std::min(v_max / a_max, t), 0.0);
+  double r = a_max * std::sqrt(std::pow(0.5 * (t*(t_up+t_down) - 0.5 * (std::pow(t_up, 2.0) + std::pow(t_down, 2.0))), 2.0) + 
+      std::pow(t*t_bar - 0.5 * std::pow(t_bar, 2.0), 2.0)) + radius + measurement_error_pos_ + measurement_error_vel_ * t;
+  Point next_pos_1 = y_0 + dy_0 * (v_0 * t + 0.5 * a_max * (t * (t_up - t_down) - 0.5 * (std::pow(t_up, 2.0) - std::pow(t_down, 2.0))));
+  Point next_pos_2 = y_1 + dy_0 * (v_0 * t + 0.5 * a_max * (t * (t_up - t_down) - 0.5 * (std::pow(t_up, 2.0) - std::pow(t_down, 2.0))));
+  
+  EXPECT_DOUBLE_EQ(cap.p1_.x, next_pos_1.x);
+  EXPECT_DOUBLE_EQ(cap.p1_.y, next_pos_1.y);
+  EXPECT_DOUBLE_EQ(cap.p1_.z, next_pos_1.z);
+  EXPECT_DOUBLE_EQ(cap.p2_.x, next_pos_2.x);
+  EXPECT_DOUBLE_EQ(cap.p2_.y, next_pos_2.y);
+  EXPECT_DOUBLE_EQ(cap.p2_.z, next_pos_2.z);
+  EXPECT_DOUBLE_EQ(cap.r_, r);
+}
+
 TEST_F(BodyPartCombinedTest, MultipleVelTest) {
   Point y_0(0.0, 0.0, 0.0);
   double prediction_time = 0.18;
