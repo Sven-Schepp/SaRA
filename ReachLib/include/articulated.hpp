@@ -82,13 +82,13 @@ class Articulated : public Obstacle {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  bool intersection(std::vector<Point> targets) const {
+  virtual bool intersection(std::vector<Point> targets) const {
     throw "Function safety_perimeters::articulated::Articulated::intersection is not defined!";
   }
 
   //! \brief Returns the mode of the reachalility analysis:
   //!        Mode returned from: [ACCEL, VEL, POS]
-  std::string get_mode() const {
+  virtual std::string get_mode() const {
     std::cout << "\n" << "Got error!" << "\n";
     throw "Function safety_perimeters::articulated::Articulated::get_mode is not defined!";
   }

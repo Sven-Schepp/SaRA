@@ -60,8 +60,8 @@ class ArticulatedCombined : public ArticulatedAccel {
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'ACCEL'
-  std::string get_mode() const {
-      return "ARICULATED-COMBINED";
+  std::string get_mode() const override{
+      return "ARTICULATED-COMBINED";
   }
 
   //! \brief Returns the current occupancy as a list of body parts

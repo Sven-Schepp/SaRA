@@ -158,10 +158,10 @@ inline std::vector<Capsule> get_capsules_combined_wrapper(const Articulated& a)
 }
 
 const std::map<std::string, std::function<std::vector<Capsule>(const Articulated&)>> get_capsule_map = {
-  {"ARICULATED-POS", get_capsules_pos_wrapper},
-  {"ARICULATED-VEL", get_capsules_vel_wrapper},
-  {"ARICULATED-ACCEL", get_capsules_accel_wrapper},
-  {"ARICULATED-COMBINED", get_capsules_combined_wrapper}
+  {"ARTICULATED-POS", get_capsules_pos_wrapper},
+  {"ARTICULATED-VEL", get_capsules_vel_wrapper},
+  {"ARTICULATED-ACCEL", get_capsules_accel_wrapper},
+  {"ARTICULATED-COMBINED", get_capsules_combined_wrapper}
 };
 
 
