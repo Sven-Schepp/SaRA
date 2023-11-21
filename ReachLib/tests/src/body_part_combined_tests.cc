@@ -9,7 +9,7 @@
 
 namespace occupancies{
 namespace body_parts {
-namespace accel {
+namespace combined {
 
 std::vector<Point> simulate_point_movement(
     Point y_0, Point dy_0, double delta_y, double delta_dy,
@@ -161,6 +161,6 @@ TEST_F(BodyPartCombinedTest, MeasErrorZeorTest) {
     run_test_suite(body_, y_0, dy_0, prediction_time, delay, 0.0, 0.0, v_max_, a_max_);
   }
 }
-}  // namespace accel
+}  // namespace combined
 }  // namespace body_parts
 }  // namespace occupancies

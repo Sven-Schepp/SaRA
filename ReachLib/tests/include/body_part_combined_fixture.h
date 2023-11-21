@@ -29,7 +29,7 @@
 
 namespace occupancies{
 namespace body_parts {
-namespace accel {
+namespace combined {
 
 /**
  * @brief Test fixture for the combined body part
@@ -60,7 +60,7 @@ class BodyPartCombinedTest : public ::testing::Test {
     body_ = BodyPartCombined("test", thickness_, v_max_, v_max_, a_max_, a_max_);
   }
 };
-}  // namespace accel
+}  // namespace combined
 }  // namespace body_parts
 }  // namespace occupancies
 
