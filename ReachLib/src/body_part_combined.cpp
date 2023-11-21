@@ -27,11 +27,11 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 
 namespace occupancies {
 namespace body_parts {
-namespace accel {
+namespace combined {
 
 BodyPartCombined::BodyPartCombined(std::string name, double thickness, double max_v1, double max_v2, double max_a1, double max_a2) :
-                             BodyPartAccel(name, thickness, max_a1, max_a2),
-                             max_v1_(max_v1), max_v2_(max_v2) {
+                             BodyPart(name, thickness),
+                             max_v1_(max_v1), max_v2_(max_v2), max_a1_(max_a1), max_a2_(max_a2) {
   //  NO TODO
 }
 
@@ -87,6 +87,10 @@ Capsule BodyPartCombined::ry(const Point& p, const Point& v,
   double center_shift = t * v_0 + 0.5 * a_max * (t*(t_up-t_down) - 0.5 * (std::pow(t_up, 2.0) - std::pow(t_down, 2.0)));
   Point center = y + dy * center_shift;
   return Capsule(center, center, radius_big_circle + measurement_error_pos + measurement_error_vel * t);
+}
+
+bool BodyPartCombined::intersection(std::vector<Point> targets) const {
+  return this->occupancy_.intersection(targets);
 }
 
 void BodyPartCombined::update(const std::vector<Point>& p,

@@ -67,7 +67,7 @@ typedef occupancy_containers::capsule::Capsule Capsule;
 typedef occupancy_containers::cylinder::Cylinder Cylinder;
 
 //! Occupancy models
-typedef occupancies::body_parts::accel::BodyPartCombined BodyPartCombined;
+typedef occupancies::body_parts::combined::BodyPartCombined BodyPartCombined;
 typedef occupancies::body_parts::accel::BodyPartAccel BodyPartAccel;
 typedef occupancies::body_parts::vel::BodyPartVel BodyPartVel;
 typedef occupancies::extremities::Extremity Extremity;
@@ -75,7 +75,7 @@ typedef occupancies::cylinder_perimeters::CylinderPerimeter CylinderPerimeter;
 
 //! Articulated models
 typedef obstacles::articulated::Articulated Articulated;
-typedef obstacles::articulated::accel::ArticulatedCombined ArticulatedCombined;
+typedef obstacles::articulated::combined::ArticulatedCombined ArticulatedCombined;
 typedef obstacles::articulated::accel::ArticulatedAccel ArticulatedAccel;
 typedef obstacles::articulated::pos::ArticulatedPos ArticulatedPos;
 typedef obstacles::articulated::vel::ArticulatedVel ArticulatedVel;

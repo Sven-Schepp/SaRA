@@ -17,14 +17,14 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 
 namespace obstacles {
 namespace articulated {
-namespace accel {
+namespace combined {
 
 ArticulatedCombined::ArticulatedCombined(System system, std::map<std::string, jointPair> body_segment_map,
                    const std::map<std::string, double>& thickness,
                    const std::vector<double>& max_v,
                    const std::vector<double>& max_a) :
-    ArticulatedAccel(system, body_segment_map) {
-  // Create a list of BodyPartAccel that is later set as occpancy_
+    Articulated(system, body_segment_map) {
+  // Create a list of BodyPartCombined that is later set as occpancy_
   std::vector<BodyPartCombined> body = {};
   for (const auto& it : body_segment_map) {
     body.push_back(BodyPartCombined(it.first, thickness.at(it.first), 
@@ -37,6 +37,33 @@ ArticulatedCombined::ArticulatedCombined(System system, std::map<std::string, jo
     this->occupancy_p.push_back(&(this->occupancy_[i]));
   }
 }
-}  // namespace accel
+
+std::vector<BodyPartCombined> ArticulatedCombined::update(double t_a, double t_b,
+                                                    std::vector<Point> p,
+                                                    std::vector<Point> v) {
+  // std::cout << "Length: " << this->get_occupancy_().size() << "\n";
+  int count = 0;
+  for (auto& it : this->occupancy_) {
+    int p1_id = this->body_segment_map_.at(it.get_name()).first;
+    int p2_id = this->body_segment_map_.at(it.get_name()).second;
+    it.update({p[p1_id], p[p2_id]}, {v[p1_id], v[p2_id]}, t_a, t_b,
+              this->system.measurement_error_pos_,
+              this->system.measurement_error_vel_,
+              this->system.delay_);
+    this->occupancy_[count] = it;
+    count++;
+  }
+  return this->occupancy_;
+}
+
+bool ArticulatedCombined::intersection(std::vector<Point> targets) const {
+  for (auto& it : this->occupancy_) {
+    if (it.intersection(targets)) {
+      return true;
+    }
+  }
+  return false;
+}
+}  // namespace combined
 }  // namespace articulated
 }  // namespace obstacles

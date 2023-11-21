@@ -17,7 +17,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include <utility>
 #include <vector>
 
-#include "articulated_accel.hpp"
+#include "articulated.hpp"
 #include "body_part_combined.hpp"
 #include "capsule.hpp"
 #include "obstacle.hpp"
@@ -28,10 +28,10 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 
 namespace obstacles {
 namespace articulated {
-namespace accel {
+namespace combined {
 
 //! \typedef A shortcut to the body part class for the ACCEL model
-typedef occupancies::body_parts::accel::BodyPartCombined BodyPartCombined;
+typedef occupancies::body_parts::combined::BodyPartCombined BodyPartCombined;
 
 /*! This class defines our maximum velocity/acceleration based
  *  full body articulated reachable occupancy model.
@@ -39,10 +39,10 @@ typedef occupancies::body_parts::accel::BodyPartCombined BodyPartCombined;
  *  and velocity vectors and determines occupancy using
  *  maximum acceleration and velocity parameters for all joints.
  */
-class ArticulatedCombined : public ArticulatedAccel {
+class ArticulatedCombined : public Articulated {
  public:
   //! \brief Empty constructor
-  ArticulatedCombined() : ArticulatedAccel() {}
+  ArticulatedCombined() : Articulated() {}
 
   //! \brief Instantiates the maximum acceleration based model from joint pairs.
   //! \param[in] system System parameters such as: delay and measurement errors
@@ -57,6 +57,21 @@ class ArticulatedCombined : public ArticulatedAccel {
 
   //! \brief Empty destructor
   ~ArticulatedCombined() {}
+
+  //! \brief Calcualtes the current occupancy using the Articuated 'ACCEL' model
+  //! \param[in] p Current joint positions in Cartesian coordinartes (x, y ,z)
+  //! \param[in] v Current joint velocities
+  //! \param[in] t_a Start of the interval of analysis
+  //! \param[in] t_b End of the interval of analysis
+  std::vector<BodyPartCombined> update(double t_a, double t_b,
+                                     std::vector<Point> p,
+                                     std::vector<Point> v = {});
+
+  //! \brief Returns true if the current occupancy intersects with
+  //!        any given point in 'targets'
+  //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
+  //!                    checked against the current occupancy
+  bool intersection(std::vector<Point> targets) const override;
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'ACCEL'
@@ -73,7 +88,7 @@ class ArticulatedCombined : public ArticulatedAccel {
   //! \brief Contains the most recent state of all occupancy segments
   std::vector<BodyPartCombined> occupancy_ = {};
 };
-}  // namespace accel
+}  // namespace combined
 }  // namespace articulated
 }  // namespace obstacles
 #endif  //  REACH_LIB_INCLUDE_ARTICULATED_COMBINED_HPP_

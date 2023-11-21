@@ -26,12 +26,12 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 
 namespace occupancies{
 namespace body_parts {
-namespace accel {
+namespace combined {
 
-class BodyPartCombined : public BodyPartAccel {
+class BodyPartCombined : public BodyPart {
  public:
   //! \brief Empty constructor
-  BodyPartCombined() : BodyPartAccel() {}
+  BodyPartCombined() : BodyPart() {}
 
   //! \brief Instatiates a BodyPart that updates based on live velocities,
   //!        maximum acceleration, and maximum velocity.
@@ -62,12 +62,22 @@ class BodyPartCombined : public BodyPartAccel {
               double measurement_error_vel = 0.0,
               double delay = 0.0);
 
+  //! \brief Determines if any point from the list 'targets' is located inside
+  //!        the current occupancy.
+  bool intersection(std::vector<Point> targets) const;
+
  protected:
   //! \brief Maximum estimated velocity of the proximal joint (constant)
   double max_v1_ = 0.0;
 
   //! \brief Maximum estimated velocity of the distal joint (constant)
   double max_v2_ = 0.0;
+
+  //! \brief Maximum estimated acceleration of the proximal joint (constant)
+  double max_a1_ = 0.0;
+
+  //! \brief Maximum estimated acceleration of the distal joint (constant)
+  double max_a2_ = 0.0;
 
   //! \brief Determines the ball occupancy within [0.0, t_b] for one joint
   //! This needs to be performed for both joints before enclosing the occupacnies
@@ -84,7 +94,7 @@ class BodyPartCombined : public BodyPartAccel {
              double measurement_error_pos = 0.0,
              double measurement_error_vel = 0.0) const;
 };
-}  // namespace accel
+}  // namespace combined
 }  // namespace body_parts
 }  // namespace occupancies
 #endif  // REACH_LIB_INCLUDE_BODY_PART_COMBINED_HPP_
