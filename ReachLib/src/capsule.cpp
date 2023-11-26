@@ -177,7 +177,7 @@ bool Capsule::point_capsule_intersection(const Capsule& c, const std::vector<Poi
       }
     }
   }
-  return true;
+  return false;
 }
 
 }  //  namespace capsule

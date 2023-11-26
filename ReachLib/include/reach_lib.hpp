@@ -35,6 +35,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include "body_part_vel.hpp"
 #include "capsule.hpp"
 #include "cylinder.hpp"
+#include "aabb.hpp"
 #include "cylinder_perimeter.hpp"
 #include "extremity.hpp"
 #include "intersections.hpp"
@@ -65,6 +66,7 @@ typedef obstacles::articulated::jointPair jointPair;
 //! Occupancy containers
 typedef occupancy_containers::capsule::Capsule Capsule;
 typedef occupancy_containers::cylinder::Cylinder Cylinder;
+typedef occupancy_containers::aabb::AABB AABB;
 
 //! Occupancy models
 typedef occupancies::body_parts::combined::BodyPartCombined BodyPartCombined;
