@@ -15,7 +15,6 @@
  */
 
 #include <gtest/gtest.h>
-#include <yaml-cpp/yaml.h>
 
 #include <filesystem>
 #include <iostream>
