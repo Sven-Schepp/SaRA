@@ -26,7 +26,7 @@ Cylinder::Cylinder(const Point& p1, const Point& p2, double r) :
   //  NO TODO
 }
 
-const bool Cylinder::intersection(const std::vector<Point>& targets) {
+bool Cylinder::intersection(const std::vector<Point>& targets) const {
   bool intersect = false;
   for (const auto& p : targets) {
     // The cylinder is defined by a line segment from

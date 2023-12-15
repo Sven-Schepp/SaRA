@@ -12,32 +12,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details: https://www.gnu.org/licenses/.
 */
 
-#include <map>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include "articulated.hpp"
-#include "articulated_accel.hpp"
-#include "body_part_accel.hpp"
-#include "capsule.hpp"
-#include "obstacle.hpp"
-#include "system.hpp"
+#include "articulated_combined.hpp"
 
 
 namespace obstacles {
 namespace articulated {
-namespace accel {
+namespace combined {
 
-ArticulatedAccel::ArticulatedAccel(System system, std::map<std::string, jointPair> body_segment_map,
-                                   const std::map<std::string, double>& thickness,
-                                   const std::vector<double>& max_a) :
-                                   Articulated(system, body_segment_map) {
-  // Create a list of BodyPartAccel that is later set as occpancy_
-  std::vector<BodyPartAccel> body = {};
+ArticulatedCombined::ArticulatedCombined(System system, std::map<std::string, jointPair> body_segment_map,
+                   const std::map<std::string, double>& thickness,
+                   const std::vector<double>& max_v,
+                   const std::vector<double>& max_a) :
+    Articulated(system, body_segment_map) {
+  // Create a list of BodyPartCombined that is later set as occpancy_
+  std::vector<BodyPartCombined> body = {};
   for (const auto& it : body_segment_map) {
-    body.push_back(BodyPartAccel(it.first, thickness.at(it.first), max_a.at(it.second.first),
-                                 max_a.at(it.second.second)));
+    body.push_back(BodyPartCombined(it.first, thickness.at(it.first), 
+                                    max_v.at(it.second.first), max_v.at(it.second.second),
+                                    max_a.at(it.second.first), max_a.at(it.second.second)));
   }
   this->occupancy_ = body;
   // Initialize pointers
@@ -46,7 +38,7 @@ ArticulatedAccel::ArticulatedAccel(System system, std::map<std::string, jointPai
   }
 }
 
-std::vector<BodyPartAccel> ArticulatedAccel::update(double t_a, double t_b,
+std::vector<BodyPartCombined> ArticulatedCombined::update(double t_a, double t_b,
                                                     std::vector<Point> p,
                                                     std::vector<Point> v) {
   // std::cout << "Length: " << this->get_occupancy_().size() << "\n";
@@ -64,7 +56,7 @@ std::vector<BodyPartAccel> ArticulatedAccel::update(double t_a, double t_b,
   return this->occupancy_;
 }
 
-bool ArticulatedAccel::intersection(std::vector<Point> targets) const {
+bool ArticulatedCombined::intersection(std::vector<Point> targets) const {
   for (auto& it : this->occupancy_) {
     if (it.intersection(targets)) {
       return true;
@@ -72,6 +64,6 @@ bool ArticulatedAccel::intersection(std::vector<Point> targets) const {
   }
   return false;
 }
-}  // namespace accel
+}  // namespace combined
 }  // namespace articulated
 }  // namespace obstacles

@@ -51,7 +51,7 @@ class CylinderPerimeter : public Occupancy {
   //! Determines if the cylinder intersects with
   //! any point from within the targest list
   //! \param[in] Points of interest for inertsections
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
   //! \brief Calcualtes the current occupancy using the Pedestrian model
   //! \param[in] p Current joint position in Cartesian coordinartes (x, y ,z)
@@ -71,12 +71,12 @@ class CylinderPerimeter : public Occupancy {
   }
 
   //! \brief Returns the current occupancy
-  inline Cylinder get_occupancy() {
+  inline Cylinder get_occupancy() const {
     return this->occupancy_;
   }
 
   //! \brief Returns the list of cylindrical partial occupancies
-  inline std::vector<Cylinder> get_cylinder_list() {
+  inline std::vector<Cylinder> get_cylinder_list() const {
     return this->cylinder_list_;
   }
 

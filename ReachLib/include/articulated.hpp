@@ -82,19 +82,19 @@ class Articulated : public Obstacle {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<Point> targets) {
+  virtual bool intersection(std::vector<Point> targets) const {
     throw "Function safety_perimeters::articulated::Articulated::intersection is not defined!";
   }
 
   //! \brief Returns the mode of the reachalility analysis:
   //!        Mode returned from: [ACCEL, VEL, POS]
-  std::string get_mode() {
+  virtual std::string get_mode() const {
     std::cout << "\n" << "Got error!" << "\n";
     throw "Function safety_perimeters::articulated::Articulated::get_mode is not defined!";
   }
 
   //! \brief Returns the map of body segments and joint pairs
-  std::map<std::string, articulated::jointPair> get_body_segment_map() {
+  std::map<std::string, articulated::jointPair> get_body_segment_map() const {
     return this->body_segment_map_;
   }
 

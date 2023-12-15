@@ -18,52 +18,54 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include <vector>
 
 #include "articulated.hpp"
-#include "body_part_vel.hpp"
+#include "body_part_combined.hpp"
 #include "capsule.hpp"
 #include "obstacle.hpp"
 #include "system.hpp"
 
-#ifndef REACH_LIB_INCLUDE_ARTICULATED_VEL_HPP_
-#define REACH_LIB_INCLUDE_ARTICULATED_VEL_HPP_
+#ifndef REACH_LIB_INCLUDE_ARTICULATED_COMBINED_HPP_
+#define REACH_LIB_INCLUDE_ARTICULATED_COMBINED_HPP_
 
 namespace obstacles {
 namespace articulated {
-namespace vel {
+namespace combined {
 
-//! \typedef A shortcut to the body part class for the VEL model
-typedef occupancies::body_parts::vel::BodyPartVel BodyPartVel;
+//! \typedef A shortcut to the body part class for the ACCEL model
+typedef occupancies::body_parts::combined::BodyPartCombined BodyPartCombined;
 
-/*! This class defines our maximum velocity based
+/*! This class defines our maximum velocity/acceleration based
  *  full body articulated reachable occupancy model.
  *  It recieves current Cartesian joint positions
- *  and determines occupancy using
- *  static maximum velocity parameters for all joints.
+ *  and velocity vectors and determines occupancy using
+ *  maximum acceleration and velocity parameters for all joints.
  */
-class ArticulatedVel : public Articulated {
+class ArticulatedCombined : public Articulated {
  public:
   //! \brief Empty constructor
-  ArticulatedVel() : Articulated() {}
+  ArticulatedCombined() : Articulated() {}
 
-  //! \brief Instantiates the maximum velocity based model from joint pairs.
+  //! \brief Instantiates the maximum acceleration based model from joint pairs.
   //! \param[in] system System parameters such as: delay and measurement errors
   //! \param[in] body_segment_map_ An association between joints and body segments
   //! \param[in] thickness Defines the thickness (diameter) of each body part [body part name, thickness]
   //! \param[in] max_v Maximum velocity of each joint
-  ArticulatedVel(System system, std::map<std::string, jointPair> body_segment_map,
+  //! \param[in] max_a Maximum acceleration of each joint
+  ArticulatedCombined(System system, std::map<std::string, jointPair> body_segment_map,
                    const std::map<std::string, double>& thickness,
-                   const std::vector<double>& max_v);
+                   const std::vector<double>& max_v,
+                   const std::vector<double>& max_a);
 
   //! \brief Empty destructor
-  ~ArticulatedVel() {}
+  ~ArticulatedCombined() {}
 
   //! \brief Calcualtes the current occupancy using the Articuated 'ACCEL' model
   //! \param[in] p Current joint positions in Cartesian coordinartes (x, y ,z)
   //! \param[in] v Current joint velocities
   //! \param[in] t_a Start of the interval of analysis
   //! \param[in] t_b End of the interval of analysis
-  std::vector<BodyPartVel> update(double t_a, double t_b,
-                                  std::vector<Point> p,
-                                  std::vector<Point> v = {});
+  std::vector<BodyPartCombined> update(double t_a, double t_b,
+                                     std::vector<Point> p,
+                                     std::vector<Point> v = {});
 
   //! \brief Returns true if the current occupancy intersects with
   //!        any given point in 'targets'
@@ -72,21 +74,21 @@ class ArticulatedVel : public Articulated {
   bool intersection(std::vector<Point> targets) const override;
 
   //! \brief Returns the mode of reachability analysis
-  //!        of this class as 'VEL'
+  //!        of this class as 'ACCEL'
   std::string get_mode() const override{
-      return "ARTICULATED-VEL";
+      return "ARTICULATED-COMBINED";
   }
 
   //! \brief Returns the current occupancy as a list of body parts
-  std::vector<BodyPartVel> get_occupancy() const {
-    return this->occupancy_;
+  std::vector<BodyPartCombined> get_occupancy() const {
+    return occupancy_;
   }
 
  private:
-  //! \brief Contains the current occupancies
-  std::vector<BodyPartVel> occupancy_;
+  //! \brief Contains the most recent state of all occupancy segments
+  std::vector<BodyPartCombined> occupancy_ = {};
 };
-}  // namespace vel
+}  // namespace combined
 }  // namespace articulated
 }  // namespace obstacles
-#endif  //  REACH_LIB_INCLUDE_ARTICULATED_ACCEL_HPP_
+#endif  //  REACH_LIB_INCLUDE_ARTICULATED_COMBINED_HPP_

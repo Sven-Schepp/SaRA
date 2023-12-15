@@ -35,7 +35,7 @@ PedestrianVel::PedestrianVel(const System& sensor, double height,
   //  NO TODO
 }
 
-const bool PedestrianVel::intersection(std::vector<Point> targets) {
+bool PedestrianVel::intersection(std::vector<Point> targets) const {
   bool intersection = false;
   for (const auto& it : targets) {
     intersection = this->occupancy_[0].intersection(targets);

@@ -51,7 +51,7 @@ class Occupancy {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<point::Point> targets) {
+  bool intersection(std::vector<point::Point> targets) const {
     throw "Function occupancy_models::Occupancy::intersection is not defined!";
   }
 
@@ -74,12 +74,12 @@ class Occupancy {
 
   //! \brief Returns the occupancy according to its occupancy model
   //! Throws a NULL-pointer exception if the occupancy pointer is not set
-  OccupancyContainer* get_occupancy_p() {
+  OccupancyContainer* get_occupancy_p() const {
     return this->occupancy_p;
   }
 
   //! \brief Returns the name of the body part
-  std::string get_name() {
+  std::string get_name() const {
       return this->name_;
   }
 

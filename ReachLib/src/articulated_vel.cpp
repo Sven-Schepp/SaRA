@@ -62,7 +62,7 @@ std::vector<BodyPartVel> ArticulatedVel::update(double t_a, double t_b,
   return this->occupancy_;
 }
 
-const bool ArticulatedVel::intersection(std::vector<Point> targets) {
+bool ArticulatedVel::intersection(std::vector<Point> targets) const {
   for (auto& it : this->occupancy_) {
     if (it.intersection(targets)) {
       return true;

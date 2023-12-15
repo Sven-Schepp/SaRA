@@ -76,16 +76,16 @@ class ArticulatedPos : public Articulated {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const override;
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'ACCEL'
-  std::string get_mode() {
+  std::string get_mode() const override{
       return "ARTICULATED-POS";
   }
 
   //! \brief Returns the current occupancy as a list of extremities
-  std::vector<Extremity> get_occupancy() {
+  std::vector<Extremity> get_occupancy() const {
     return this->occupancy_;
   }
 

@@ -52,7 +52,7 @@ class Cylinder : public  OccupancyContainer {
   //! \brief Determines whether there exists an intersection between
   //!        a cylinder and any point within targets.
   //! \param[in] targets List of points of interes in Cartesian (x y z)
-  const bool intersection(const std::vector<Point>& targets);
+  bool intersection(const std::vector<Point>& targets) const;
 
   //! \brief Determines whether this cylinder and a capsule c intersect.
   //! \param[in] c A Capsule object checked against this cylinder

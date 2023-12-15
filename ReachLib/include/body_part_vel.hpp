@@ -36,8 +36,8 @@ class BodyPartVel : public BodyPart {
   //!        maximum estimated velocities.
   //! \param[in] name Name of the body part
   //! \param[in] thickness Estimated thickness (diameter) of the body part
-  //! \param[in] max_a Estimated maximum velocity of this body part
-  BodyPartVel(std::string name, double thickness, double max_a1 = 0.0, double max_a2 = 0.0);
+  //! \param[in] max_v Estimated maximum velocity of this body part
+  BodyPartVel(std::string name, double thickness, double max_v1 = 0.0, double max_v2 = 0.0);
 
   //! \brief Empty destructor
   ~BodyPartVel() {}
@@ -59,9 +59,9 @@ class BodyPartVel : public BodyPart {
 
   //! \brief Determines if any point from the list 'targets' is located inside
   //!        the current occupancy.
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
- private:
+ protected:
   //! \brief Maximum estimated velocity of the proximal joint (constant)
   double max_v1_ = 0.0;
 
@@ -77,7 +77,7 @@ class BodyPartVel : public BodyPart {
   //! \param[in] delay Time delay within the executing system
   //! \param[in] measurement_error_pos Measurement errors in cartesian position [m]
   Capsule ry(const Point& p, int index, double t_end = 0.02,
-             double delay = 0.0, double measurement_error_pos = 0.0);
+             double delay = 0.0, double measurement_error_pos = 0.0) const;
 };
 }  // namespace vel
 }  // namespace body_parts

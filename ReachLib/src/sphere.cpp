@@ -25,7 +25,7 @@ Sphere::Sphere(Point p, double r) : p_(p), r_(r) {
   //  NO TODO
 }
 
-bool Sphere::intersection(const std::vector<Point>& targets) {
+bool Sphere::intersection(const std::vector<Point>& targets) const {
   double intersection = false;
   for (const auto& it : targets) {
     if (Point::norm(it, this->p_) < 0) {

@@ -86,14 +86,14 @@ void BodyPartAccel::update(const std::vector<Point>& p,
   }
 }
 
-bool BodyPartAccel::intersection(std::vector<Point> targets) {
+bool BodyPartAccel::intersection(std::vector<Point> targets) const {
   return this->occupancy_.intersection(targets);
 }
 
 Capsule BodyPartAccel::ry(const Point& p, const Point& v,
                           int index, double t_b, double delay,
                           double measurement_error_pos,
-                          double measurement_error_vel) {
+                          double measurement_error_vel) const {
   Point y;
   y = p;
   Point dy = v;

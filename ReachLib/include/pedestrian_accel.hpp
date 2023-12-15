@@ -61,17 +61,17 @@ class PedestrianAccel : public Pedestrian {
   //!        the current occupancy.
   //! \param[in] targets A list of points of interest to be checked against
   //!                    the current occupancy.
-  const bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const;
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'PEDESTRIAN-ACCEL'
-  std::string get_mode() {
+  std::string get_mode() const {
       return "PEDESTRIAN-ACCEL";
   }
 
   //! \brief Returns the maximum acceleration parameter
-  double get_max_a() {
-    return this->max_a_;
+  double get_max_a() const {
+    return max_a_;
   }
 
   //! \brief Emtpy destructor

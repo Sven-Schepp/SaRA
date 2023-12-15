@@ -34,7 +34,7 @@ CylinderPerimeter::CylinderPerimeter(const Point& init_pos, double height, doubl
   this->cylinder_list_.push_back(c);
 }
 
-const bool CylinderPerimeter::intersection(std::vector<Point> targets) {
+bool CylinderPerimeter::intersection(std::vector<Point> targets) const {
   return this->occupancy_.intersection(targets);
 }
 }  //  namespace cylinder_perimeters

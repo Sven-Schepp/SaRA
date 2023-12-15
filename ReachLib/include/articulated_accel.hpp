@@ -44,6 +44,12 @@ class ArticulatedAccel : public Articulated {
   //! \brief Empty constructor
   ArticulatedAccel() : Articulated() {}
 
+  //! \brief Empty constructor
+  //! \param[in] system System parameters such as: delay and measurement errors
+  //! \param[in] body_segment_map_ An association between joints and body segments
+  ArticulatedAccel(System system, std::map<std::string, jointPair> body_segment_map) : 
+    Articulated(system, body_segment_map) {}
+
   //! \brief Instantiates the maximum acceleration based model from joint pairs.
   //! \param[in] system System parameters such as: delay and measurement errors
   //! \param[in] body_segment_map_ An association between joints and body segments
@@ -69,16 +75,16 @@ class ArticulatedAccel : public Articulated {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  bool intersection(std::vector<Point> targets);
+  bool intersection(std::vector<Point> targets) const override;
 
   //! \brief Returns the mode of reachability analysis
   //!        of this class as 'ACCEL'
-  std::string get_mode() {
-      return "ARICULATED-ACCEL";
+  std::string get_mode() const override{
+      return "ARTICULATED-ACCEL";
   }
 
   //! \brief Returns the current occupancy as a list of body parts
-  std::vector<BodyPartAccel> get_occupancy() {
+  std::vector<BodyPartAccel> get_occupancy() const{
     return this->occupancy_;
   }
 

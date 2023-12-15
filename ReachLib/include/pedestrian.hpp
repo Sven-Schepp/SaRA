@@ -71,28 +71,28 @@ class Pedestrian : public Obstacle {
   //!        any given point in 'targets'
   //! \param[in] targets A list of points in global Cartesian coordinates (x, y, z)
   //!                    checked against the current occupancy
-  const bool intersection(std::vector<Point> targets) {
+  bool intersection(std::vector<Point> targets) const {
     throw "Function safety_perimeters::pedestrian::Pedestrian::intersection is not defined!";
   }
 
   //! \brief Returns the current occupancy
-  std::vector<CylinderPerimeter> get_occupancy() {
+  std::vector<CylinderPerimeter> get_occupancy() const {
     return this->occupancy_;
   }
 
   //! \brief Returns the pedestrians height
-  double get_height() {
+  double get_height() const {
     return this->height_;
   }
 
   //! \brief Returns the offset of the ground level
-  double get_offset() {
+  double get_offset() const {
     return this->offset_;
   }
 
   //! \brief Returns the mode of the reachalility analysis:
   //!        Mode returned from: [ACCEL, VEL].
-  std::string get_mode() {
+  std::string get_mode() const {
     throw "Function safety_perimeters::pedestrian::Pedestrian::get_mode is not defined!";
   }
 
