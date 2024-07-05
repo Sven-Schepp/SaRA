@@ -47,7 +47,8 @@ void Extremity::update(const std::vector<Point>& p,
   // translate vector entries to proximal and distal joint values
   Point pe = p[0];
   //  Total time passed within the desired interval
-  double delta_t = t_b - t_a + delay;
+  assert(t_b >= t_a);
+  double delta_t = t_b + delay;
   //  Distance covered at max_v over delta_t
   double dist = this->max_v_ * delta_t;
   // Radius of the ball occupancy (thickness added as radius)
