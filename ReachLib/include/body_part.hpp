@@ -56,17 +56,9 @@ class BodyPart : public Occupancy {
     return occupancy_;
   }
 
-  //! \brief Returns the thickness of the body part
-  double get_thickness() const {
-      return thickness_;
-  }
-
  protected:
   //! \brief Contains the current occupancy
   Capsule occupancy_ = Capsule();
-
-  //! \brief Thickness of the body part
-  double thickness_;
 };
 }  // namespace body_parts
 }  //  namespace occupancies

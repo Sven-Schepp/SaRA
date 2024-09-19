@@ -41,8 +41,11 @@ class Occupancy {
   //! \brief Empty costructor
   Occupancy() {}
 
-  //! \brief Initializes a named object of underterined type among Occupancys
+  //! \brief Initializes a named object of underterined type among Occupancies
   explicit Occupancy(std::string name);
+
+  //! \brief Initializes a named object of underterined type among Occupancies
+  explicit Occupancy(std::string name, double thickness);
 
   //! \brief Empty destructor
   virtual ~Occupancy() {}
@@ -83,12 +86,20 @@ class Occupancy {
       return this->name_;
   }
 
+  //! \brief Returns the thickness of the body part
+  double get_thickness() const {
+      return thickness_;
+  }
+
  protected:
   //! \brief Points to the current occupancy (for dynamic cast purposes)
   OccupancyContainer* occupancy_p = NULL;
 
   //! \brief A name that defines this occupancy
   std::string name_ = "";
+
+  //! \brief Thickness of the occupancy
+  double thickness_ = 0.0;
 };
 }  //  namespace occupancies
 #endif  // REACH_LIB_INCLUDE_OCCUPANCY_MODEL_HPP_

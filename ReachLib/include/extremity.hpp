@@ -74,11 +74,6 @@ class Extremity : public Occupancy {
     return occupancy_;
   }
 
-  //! \brief Returns the thickness of the extremity
-  double get_thickness() const {
-      return thickness_;
-  }
-
   //! \brief Returns the length of the extremity
   double get_length() const {
       return length_;
@@ -87,9 +82,6 @@ class Extremity : public Occupancy {
  private:
   //! \brief Conains the current occupancy
   Capsule occupancy_ = Capsule();
-
-  //! \brief Thickness of the extremity
-  double thickness_ = 0.0;
 
   //! \brief Length of the extremity
   double length_ = 0.0;
