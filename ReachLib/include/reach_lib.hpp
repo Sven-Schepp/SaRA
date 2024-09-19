@@ -90,8 +90,7 @@ typedef obstacles::pedestrian::vel::PedestrianVel PedestrianVel;
 
 inline std::vector<Capsule> get_capsules(const ArticulatedCombined& a_comb) {
   std::vector<Capsule> capsules;
-  std::vector<BodyPartCombined> occupancy = a_comb.get_occupancy();
-  for (const auto& it : occupancy) {
+  for (const auto& it : a_comb.get_occupancy()) {
     capsules.push_back(it.get_occupancy());
   }
   return capsules;
