@@ -84,6 +84,15 @@ class ArticulatedCombined : public Articulated {
     return occupancy_;
   }
 
+  //! \brief Returns the current occupancy as a list of body parts pointers
+  std::vector<std::shared_ptr<Occupancy>> get_occupancy_p() const override {
+    std::vector<std::shared_ptr<Occupancy>> occupancy;
+    for (const auto& item : this->occupancy_) {
+      occupancy.push_back(std::make_shared<BodyPartCombined>(item));
+    }
+    return occupancy;
+  }
+
  private:
   //! \brief Contains the most recent state of all occupancy segments
   std::vector<BodyPartCombined> occupancy_ = {};

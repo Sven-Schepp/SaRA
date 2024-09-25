@@ -16,6 +16,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include <string>
 #include <utility>
 #include <vector>
+#include <memory>
 
 #include "body_part.hpp"
 #include "capsule.hpp"
@@ -91,6 +92,12 @@ class Articulated : public Obstacle {
   virtual std::string get_mode() const {
     std::cout << "\n" << "Got error!" << "\n";
     throw "Function safety_perimeters::articulated::Articulated::get_mode is not defined!";
+  }
+
+  //! \brief Returns the current occupancy as a list of occupancy pointers
+  virtual std::vector<std::shared_ptr<Occupancy>> get_occupancy_p() const {
+    std::cout << "\n" << "Got error!" << "\n";
+    throw "Function safety_perimeters::articulated::Articulated::get_occupancy_p is not defined!";
   }
 
   //! \brief Returns the map of body segments and joint pairs

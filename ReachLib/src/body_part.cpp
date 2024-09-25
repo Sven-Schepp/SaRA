@@ -27,7 +27,7 @@ BodyPart::BodyPart() : Occupancy() {
   this->occupancy_p = &this->occupancy_;
 }
 
-BodyPart::BodyPart(std::string name, double thickness) : thickness_(thickness), Occupancy(name) {
+BodyPart::BodyPart(std::string name, double thickness) : Occupancy(name, thickness) {
   //  NO TODO
 }
 }  // namespace body_parts

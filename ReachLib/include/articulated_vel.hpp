@@ -16,6 +16,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include <string>
 #include <utility>
 #include <vector>
+#include <memory>
 
 #include "articulated.hpp"
 #include "body_part_vel.hpp"
@@ -80,6 +81,15 @@ class ArticulatedVel : public Articulated {
   //! \brief Returns the current occupancy as a list of body parts
   std::vector<BodyPartVel> get_occupancy() const {
     return this->occupancy_;
+  }
+
+  //! \brief Returns the current occupancy as a list of body parts pointers
+  std::vector<std::shared_ptr<Occupancy>> get_occupancy_p() const override {
+    std::vector<std::shared_ptr<Occupancy>> occupancy;
+    for (const auto& item : this->occupancy_) {
+      occupancy.push_back(std::make_shared<BodyPartVel>(item));
+    }
+    return occupancy;
   }
 
  private:

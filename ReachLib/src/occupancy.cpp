@@ -24,4 +24,8 @@ namespace occupancies {
 Occupancy::Occupancy(std::string name) : name_(name) {
   // NO TODO
 }
+
+Occupancy::Occupancy(std::string name, double thickness) : name_(name), thickness_(thickness) {
+  // NO TODO
+}
 }  // namspace occupancies

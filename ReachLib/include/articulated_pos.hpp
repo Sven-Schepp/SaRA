@@ -89,6 +89,15 @@ class ArticulatedPos : public Articulated {
     return this->occupancy_;
   }
 
+  //! \brief Returns the current occupancy as a list of body parts pointers
+  std::vector<std::shared_ptr<Occupancy>> get_occupancy_p() const override {
+    std::vector<std::shared_ptr<Occupancy>> occupancy;
+    for (const auto& item : this->occupancy_) {
+      occupancy.push_back(std::make_shared<Extremity>(item));
+    }
+    return occupancy;
+  }
+
  private:
   //! \brief Contains the current occupancy
   std::vector<Extremity> occupancy_;

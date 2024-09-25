@@ -31,8 +31,7 @@ Extremity::Extremity() : Occupancy() {
 
 Extremity::Extremity(std::string name, double thickness,
                      double length, double max_v) :
-                     thickness_(thickness), length_(length),
-                     max_v_(max_v), Occupancy(name) {
+                     length_(length), max_v_(max_v), Occupancy(name, thickness) {
   //  NO TODO
 }
 
