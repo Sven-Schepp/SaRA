@@ -44,14 +44,24 @@ export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
 #############
 ## GTest ##
 #############
-enable_testing()
-find_package(GTest REQUIRED)
-include(GoogleTest)
+option(BUILD_TESTS "Build unit tests" ON)
 
-add_executable(body_part_combined_tests tests/src/body_part_combined_tests.cc)
-target_include_directories(body_part_combined_tests PUBLIC tests/include)
-target_link_libraries(body_part_combined_tests ${PROJECT_NAME} GTest::GTest GTest::Main)
-gtest_discover_tests(body_part_combined_tests)
+if(BUILD_TESTS)
+    enable_testing()
+    find_package(GTest QUIET)
+    
+    if(GTest_FOUND)
+        include(GoogleTest)
+        message(STATUS "GTest found. Building SaRA tests.")
+        
+        add_executable(body_part_combined_tests tests/src/body_part_combined_tests.cc)
+        target_include_directories(body_part_combined_tests PUBLIC tests/include)
+        target_link_libraries(body_part_combined_tests ${PROJECT_NAME} GTest::GTest GTest::Main)
+        gtest_discover_tests(body_part_combined_tests)
+    else()
+        message(WARNING "GTest not found. Skipping SaRA tests. Install GTest or set BUILD_TESTS=OFF to suppress this warning.")
+    endif()
+endif()
 
 #set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER include/reach_lib.hpp)
 
