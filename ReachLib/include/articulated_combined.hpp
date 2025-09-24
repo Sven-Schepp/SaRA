@@ -22,6 +22,7 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #include "capsule.hpp"
 #include "obstacle.hpp"
 #include "system.hpp"
+#include "exceptions.hpp"
 
 #ifndef REACH_LIB_INCLUDE_ARTICULATED_COMBINED_HPP_
 #define REACH_LIB_INCLUDE_ARTICULATED_COMBINED_HPP_
@@ -66,6 +67,19 @@ class ArticulatedCombined : public Articulated {
   std::vector<BodyPartCombined> update(double t_a, double t_b,
                                      std::vector<Point> p,
                                      std::vector<Point> v = {});
+
+  //! \brief Calcualtes the current occupancy using the Articuated 'ACCEL' model
+  //!        The function should be called within a verification loop.
+  //!        Uses a set of predicted future positions instead of a single measurement.
+  //!        The first prediction must have time <= t_a!
+  //!        Predicting the velocity of a point is not yet supported.
+  //! \param[in] t_a Start time of reachability analysis interval
+  //! \param[in] t_b End time of reachability analysis interval
+  //! \param[in] predictions Position of all joints in Cartesian global coordinates (x, y, z)
+  std::vector<BodyPartCombined> update_with_predictions(double t_a, double t_b,
+                                     const std::vector<Prediction>& predictions) {
+      throw PredictionNotSupportedException();
+  }
 
   //! \brief Returns true if the current occupancy intersects with
   //!        any given point in 'targets'

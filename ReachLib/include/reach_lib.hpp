@@ -64,6 +64,7 @@ typedef systems::System System;
 typedef obstacles::articulated::jointPair jointPair;
 
 //! Occupancy containers
+typedef occupancy_containers::sphere::Sphere Sphere;
 typedef occupancy_containers::capsule::Capsule Capsule;
 typedef occupancy_containers::cylinder::Cylinder Cylinder;
 typedef occupancy_containers::aabb::AABB AABB;
@@ -86,6 +87,12 @@ typedef obstacles::articulated::vel::ArticulatedVel ArticulatedVel;
 typedef obstacles::pedestrian::Pedestrian Pedestrian;
 typedef obstacles::pedestrian::accel::PedestrianAccel PedestrianAccel;
 typedef obstacles::pedestrian::vel::PedestrianVel PedestrianVel;
+
+//! Predictions
+// A prediction has a time and a vector of predicted positions
+// with bounded measurement error. 
+// The radius of the sphere gives the bounded prediction error.
+typedef std::pair<double, std::vector<Sphere>> Prediction;
 
 
 inline std::vector<Capsule> get_capsules(const ArticulatedCombined& a_comb) {

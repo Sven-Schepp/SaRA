@@ -62,6 +62,45 @@ std::vector<BodyPartVel> ArticulatedVel::update(double t_a, double t_b,
   return this->occupancy_;
 }
 
+std::vector<BodyPartVel> ArticulatedVel::update_with_predictions(double t_a, double t_b,
+                                     const std::vector<Prediction>& predictions) {
+  // FYI: typedef std::pair<double, std::vector<Sphere>> Prediction;
+  // Find max prediction time that is smaller than t_a
+  if (predictions.empty()) {
+    throw std::invalid_argument("Predictions vector cannot be empty!");
+  }
+  if (t_a < predictions[0].first) {
+    throw std::invalid_argument("The first prediction must have time <= t_a!");
+  }
+
+  // Find the best prediction (latest prediction with time <= t_a)
+  const Prediction* best_prediction = &predictions[0];
+  for (const auto& prediction : predictions) {
+    if (prediction.first <= t_a) {
+      best_prediction = &prediction;
+    } else {
+      break;
+    }
+  }
+
+  double t_a_new = t_a - best_prediction->first;
+  double t_b_new = t_b - best_prediction->first;
+
+  // We cannot simply call update() as that function uses constant measurement error.
+  int count = 0;
+  for (auto& it : this->occupancy_) {
+    int p1_id = this->body_segment_map_.at(it.get_name()).first;
+    int p2_id = this->body_segment_map_.at(it.get_name()).second;
+    double max_pos_error = std::max(best_prediction->second[p1_id].r_,
+                                    best_prediction->second[p2_id].r_);
+    it.update({best_prediction->second[p1_id].p_, best_prediction->second[p2_id].p_}, {},
+              t_a_new, t_b_new, max_pos_error, 0.0, this->system.delay_);
+    this->occupancy_[count] = it;
+    count++;
+  }
+  return this->occupancy_;
+}
+
 bool ArticulatedVel::intersection(std::vector<Point> targets) const {
   for (auto& it : this->occupancy_) {
     if (it.intersection(targets)) {

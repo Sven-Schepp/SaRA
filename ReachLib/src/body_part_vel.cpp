@@ -60,21 +60,22 @@ void BodyPartVel::update(const std::vector<Point>& p,
       b = false;
   }
 
-  // Calculate the occupancies of the proximal and distal joint up to t_a
+  // Calculate the occupancies of the proximal joint at t_a and t_b
   Capsule rp1_t1 = BodyPartVel::ry(p1, 1, t_a, delay,
                                      measurement_error_pos);
   Capsule rp1_t2 = BodyPartVel::ry(p1, 1, t_b, delay,
-                                     measurement_error_pos);  // was p2
+                                     measurement_error_pos);
   Capsule b1 = Capsule::ballEnclosure(rp1_t1, rp1_t2);
 
   if (b) {
+    // Calculate the occupancies of the distal joint at t_a and t_b
     // Add the thickness (as radius)
     rp1_t2.r_ += this->thickness_/2.0;
 
     this->occupancy_ = rp1_t2;  // was rp1_t1
   } else {
     Capsule rp2_t1 = BodyPartVel::ry(p2, 2, t_a, delay,
-                                     measurement_error_pos);  // was p1
+                                     measurement_error_pos);
     Capsule rp2_t2 = BodyPartVel::ry(p2, 2, t_b, delay,
                                      measurement_error_pos);
     Capsule b2 = Capsule::ballEnclosure(rp2_t1, rp2_t2);
