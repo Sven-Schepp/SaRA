@@ -78,7 +78,7 @@ class ArticulatedCombined : public Articulated {
   //! \param[in] predictions Position of all joints in Cartesian global coordinates (x, y, z)
   std::vector<BodyPartCombined> update_with_predictions(double t_a, double t_b,
                                      const std::vector<Prediction>& predictions) {
-      throw PredictionNotSupportedException();
+      throw reach_lib::PredictionNotSupportedException();
   }
 
   //! \brief Returns true if the current occupancy intersects with

@@ -18,10 +18,12 @@ GNU General Public License for more details: https://www.gnu.org/licenses/.
 #ifndef EXCEPTIONS_H
 #define EXCEPTIONS_H
 
+namespace reach_lib {
 struct PredictionNotSupportedException : public std::exception {
   const char* what() const throw() {
     return "The prediction for this model is not supported as it requires a predicted velocity.";
   }
 };
+}
 
 #endif // EXCEPTIONS_H
