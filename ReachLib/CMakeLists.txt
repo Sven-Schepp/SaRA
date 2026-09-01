@@ -58,6 +58,11 @@ if(BUILD_TESTS)
         target_include_directories(body_part_combined_tests PUBLIC tests/include)
         target_link_libraries(body_part_combined_tests ${PROJECT_NAME} GTest::GTest GTest::Main)
         gtest_discover_tests(body_part_combined_tests)
+
+        add_executable(intersections_tests tests/src/intersections_tests.cc)
+        target_link_libraries(intersections_tests ${PROJECT_NAME} GTest::GTest GTest::Main)
+        gtest_discover_tests(intersections_tests)
+
     else()
         message(WARNING "GTest not found. Skipping SaRA tests. Install GTest or set BUILD_TESTS=OFF to suppress this warning.")
     endif()
