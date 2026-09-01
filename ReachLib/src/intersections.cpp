@@ -80,13 +80,13 @@ double min_segment_distance(const Capsule& c1, const Capsule& c2) {
     double d0 = Point::inner_dot(_A, c2.p1_ - c1.p1_);
     double d1 = Point::inner_dot(_A, c2.p2_ - c1.p1_);
 
-    if (d0 <= 0 >= d1) {
+    if (d0 <= 0 && d1 <= 0) {
       if (std::abs(d0) < std::abs(d1)) {
         return Point::norm(c1.p1_ - c2.p1_);
       } else {
         return Point::norm(c1.p1_ - c2.p2_);
       }
-    } else if (d0 >= magA <= d1) {
+    } else if (d0 >= magA && d1 >= magA) {
       if (std::abs(d0) < std::abs(d1)) {
         return Point::norm(c1.p2_ - c2.p1_);
       } else {
